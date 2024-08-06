@@ -23,13 +23,17 @@ uiStroke.Parent = mainFrame
 
 local closeButton = Instance.new("TextButton")
 closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red color
-closeButton.Position = UDim2.new(1, -30, 0, 5)
+closeButton.Position = UDim2.new(1, 5, 0, -30) -- Positioned outside the main frame
 closeButton.Size = UDim2.new(0, 25, 0, 25)
 closeButton.Font = Enum.Font.SourceSans
 closeButton.Text = "X"
 closeButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
 closeButton.TextSize = 18
-closeButton.Parent = mainFrame
+closeButton.Parent = screenGui -- Parent it to screenGui to position it outside mainFrame
+
+local closeButtonCorner = Instance.new("UICorner")
+closeButtonCorner.CornerRadius = UDim.new(0, 5)
+closeButtonCorner.Parent = closeButton
 
 local reopenButton = Instance.new("TextButton")
 reopenButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -122,11 +126,67 @@ emeraldButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Collect All Diamonds button
+local collectAllDiamondsButton = Instance.new("TextButton")
+collectAllDiamondsButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+collectAllDiamondsButton.BackgroundTransparency = 1 -- Fully transparent background
+collectAllDiamondsButton.Position = UDim2.new(0, 10, 0, 50)
+collectAllDiamondsButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
+collectAllDiamondsButton.Font = Enum.Font.SourceSans
+collectAllDiamondsButton.Text = "Collect All Diamonds"
+collectAllDiamondsButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+collectAllDiamondsButton.TextSize = 18
+collectAllDiamondsButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+collectAllDiamondsButton.Parent = collectFrame
+
+collectAllDiamondsButton.MouseButton1Click:Connect(function()
+    local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+    local diamonds = game.Workspace.PickupableItems:FindFirstChild("Diamond")
+    if diamonds then
+        for _, v in pairs(diamonds:GetChildren()) do
+            if v then
+                Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                wait(0.5)
+            end
+        end
+        -- Return to original position
+        Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
+    end
+end)
+
+-- Collect All Emeralds button
+local collectAllEmeraldsButton = Instance.new("TextButton")
+collectAllEmeraldsButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+collectAllEmeraldsButton.BackgroundTransparency = 1 -- Fully transparent background
+collectAllEmeraldsButton.Position = UDim2.new(0, 160, 0, 50)
+collectAllEmeraldsButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
+collectAllEmeraldsButton.Font = Enum.Font.SourceSans
+collectAllEmeraldsButton.Text = "Collect All Emeralds"
+collectAllEmeraldsButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+collectAllEmeraldsButton.TextSize = 18
+collectAllEmeraldsButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+collectAllEmeraldsButton.Parent = collectFrame
+
+collectAllEmeraldsButton.MouseButton1Click:Connect(function()
+    local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+    local emeralds = game.Workspace.PickupableItems:FindFirstChild("Emerald")
+    if emeralds then
+        for _, v in pairs(emeralds:GetChildren()) do
+            if v then
+                Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                wait(0.5)
+            end
+        end
+        -- Return to original position
+        Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
+    end
+end)
+
 -- Iron button
 local ironButton = Instance.new("TextButton")
 ironButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 ironButton.BackgroundTransparency = 1 -- Fully transparent background
-ironButton.Position = UDim2.new(0, 10, 0, 50)
+ironButton.Position = UDim2.new(0, 10, 0, 90)
 ironButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
 ironButton.Font = Enum.Font.SourceSans
 ironButton.Text = "Collect Iron"
