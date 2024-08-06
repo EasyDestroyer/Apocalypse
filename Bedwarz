@@ -21,20 +21,22 @@ uiStroke.Color = Color3.fromRGB(255, 255, 255) -- White color
 uiStroke.Thickness = 2
 uiStroke.Parent = mainFrame
 
+-- Close button
 local closeButton = Instance.new("TextButton")
 closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red color
-closeButton.Position = UDim2.new(1, 5, 0, -30) -- Positioned outside the main frame
-closeButton.Size = UDim2.new(0, 25, 0, 25)
+closeButton.Position = UDim2.new(1, -35, 0, 5) -- Positioned outside and top-right of main frame
+closeButton.Size = UDim2.new(0, 30, 0, 30)
 closeButton.Font = Enum.Font.SourceSans
 closeButton.Text = "X"
 closeButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
 closeButton.TextSize = 18
-closeButton.Parent = screenGui -- Parent it to screenGui to position it outside mainFrame
+closeButton.Parent = screenGui -- Parent it to screenGui
 
 local closeButtonCorner = Instance.new("UICorner")
 closeButtonCorner.CornerRadius = UDim.new(0, 5)
 closeButtonCorner.Parent = closeButton
 
+-- Reopen button
 local reopenButton = Instance.new("TextButton")
 reopenButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 reopenButton.BackgroundTransparency = 1 -- Fully transparent background
@@ -48,18 +50,27 @@ reopenButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
 reopenButton.Visible = false
 reopenButton.Parent = screenGui
 
-local collectButton = Instance.new("TextButton")
-collectButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-collectButton.BackgroundTransparency = 1 -- Fully transparent background
-collectButton.Position = UDim2.new(0, 0, 0, 0)
-collectButton.Size = UDim2.new(1, 0, 0, 40) -- Adjusted height
-collectButton.Font = Enum.Font.SourceSans
-collectButton.Text = "Collect"
-collectButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-collectButton.TextSize = 24
-collectButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
-collectButton.Parent = mainFrame
+-- Section buttons
+local sectionNames = {"Collect", "Utility", "Blatant"}
+local sectionButtons = {}
+local buttonWidth = 100
 
+for i, name in ipairs(sectionNames) do
+    local button = Instance.new("TextButton")
+    button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    button.BackgroundTransparency = 1 -- Fully transparent background
+    button.Position = UDim2.new(0, (i-1) * buttonWidth, 0, 0) -- Arrange buttons horizontally
+    button.Size = UDim2.new(0, buttonWidth, 0, 40)
+    button.Font = Enum.Font.SourceSans
+    button.Text = name
+    button.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+    button.TextSize = 18
+    button.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+    button.Parent = mainFrame
+    table.insert(sectionButtons, button)
+end
+
+-- Collect frame
 local collectFrame = Instance.new("Frame")
 collectFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200) -- Light gray color
 collectFrame.BackgroundTransparency = 0.5 -- 50% transparent
@@ -72,7 +83,7 @@ local collectFrameCorner = Instance.new("UICorner")
 collectFrameCorner.CornerRadius = UDim.new(0, 15)
 collectFrameCorner.Parent = collectFrame
 
--- Diamond button
+-- Collect buttons
 local diamondButton = Instance.new("TextButton")
 diamondButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 diamondButton.BackgroundTransparency = 1 -- Fully transparent background
@@ -85,6 +96,55 @@ diamondButton.TextSize = 18
 diamondButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
 diamondButton.Parent = collectFrame
 
+local emeraldButton = Instance.new("TextButton")
+emeraldButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+emeraldButton.BackgroundTransparency = 1 -- Fully transparent background
+emeraldButton.Position = UDim2.new(0, 160, 0, 10)
+emeraldButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
+emeraldButton.Font = Enum.Font.SourceSans
+emeraldButton.Text = "Collect Emeralds"
+emeraldButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+emeraldButton.TextSize = 18
+emeraldButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+emeraldButton.Parent = collectFrame
+
+local collectAllDiamondsButton = Instance.new("TextButton")
+collectAllDiamondsButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+collectAllDiamondsButton.BackgroundTransparency = 1 -- Fully transparent background
+collectAllDiamondsButton.Position = UDim2.new(0, 10, 0, 50)
+collectAllDiamondsButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
+collectAllDiamondsButton.Font = Enum.Font.SourceSans
+collectAllDiamondsButton.Text = "Collect All Diamonds"
+collectAllDiamondsButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+collectAllDiamondsButton.TextSize = 18
+collectAllDiamondsButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+collectAllDiamondsButton.Parent = collectFrame
+
+local collectAllEmeraldsButton = Instance.new("TextButton")
+collectAllEmeraldsButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+collectAllEmeraldsButton.BackgroundTransparency = 1 -- Fully transparent background
+collectAllEmeraldsButton.Position = UDim2.new(0, 160, 0, 50)
+collectAllEmeraldsButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
+collectAllEmeraldsButton.Font = Enum.Font.SourceSans
+collectAllEmeraldsButton.Text = "Collect All Emeralds"
+collectAllEmeraldsButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+collectAllEmeraldsButton.TextSize = 18
+collectAllEmeraldsButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+collectAllEmeraldsButton.Parent = collectFrame
+
+local ironButton = Instance.new("TextButton")
+ironButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+ironButton.BackgroundTransparency = 1 -- Fully transparent background
+ironButton.Position = UDim2.new(0, 10, 0, 90)
+ironButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
+ironButton.Font = Enum.Font.SourceSans
+ironButton.Text = "Collect Iron"
+ironButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+ironButton.TextSize = 18
+ironButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+ironButton.Parent = collectFrame
+
+-- Functionality for Collect buttons
 diamondButton.MouseButton1Click:Connect(function()
     local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
     local diamonds = game.Workspace.PickupableItems:FindFirstChild("Diamond")
@@ -99,19 +159,6 @@ diamondButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Emerald button
-local emeraldButton = Instance.new("TextButton")
-emeraldButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-emeraldButton.BackgroundTransparency = 1 -- Fully transparent background
-emeraldButton.Position = UDim2.new(0, 160, 0, 10)
-emeraldButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
-emeraldButton.Font = Enum.Font.SourceSans
-emeraldButton.Text = "Collect Emeralds"
-emeraldButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-emeraldButton.TextSize = 18
-emeraldButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
-emeraldButton.Parent = collectFrame
-
 emeraldButton.MouseButton1Click:Connect(function()
     local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
     local emeralds = game.Workspace.PickupableItems:FindFirstChild("Emerald")
@@ -125,19 +172,6 @@ emeraldButton.MouseButton1Click:Connect(function()
         end
     end
 end)
-
--- Collect All Diamonds button
-local collectAllDiamondsButton = Instance.new("TextButton")
-collectAllDiamondsButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-collectAllDiamondsButton.BackgroundTransparency = 1 -- Fully transparent background
-collectAllDiamondsButton.Position = UDim2.new(0, 10, 0, 50)
-collectAllDiamondsButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
-collectAllDiamondsButton.Font = Enum.Font.SourceSans
-collectAllDiamondsButton.Text = "Collect All Diamonds"
-collectAllDiamondsButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-collectAllDiamondsButton.TextSize = 18
-collectAllDiamondsButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
-collectAllDiamondsButton.Parent = collectFrame
 
 collectAllDiamondsButton.MouseButton1Click:Connect(function()
     local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
@@ -154,19 +188,6 @@ collectAllDiamondsButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Collect All Emeralds button
-local collectAllEmeraldsButton = Instance.new("TextButton")
-collectAllEmeraldsButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-collectAllEmeraldsButton.BackgroundTransparency = 1 -- Fully transparent background
-collectAllEmeraldsButton.Position = UDim2.new(0, 160, 0, 50)
-collectAllEmeraldsButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
-collectAllEmeraldsButton.Font = Enum.Font.SourceSans
-collectAllEmeraldsButton.Text = "Collect All Emeralds"
-collectAllEmeraldsButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-collectAllEmeraldsButton.TextSize = 18
-collectAllEmeraldsButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
-collectAllEmeraldsButton.Parent = collectFrame
-
 collectAllEmeraldsButton.MouseButton1Click:Connect(function()
     local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
     local emeralds = game.Workspace.PickupableItems:FindFirstChild("Emerald")
@@ -182,19 +203,6 @@ collectAllEmeraldsButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Iron button
-local ironButton = Instance.new("TextButton")
-ironButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-ironButton.BackgroundTransparency = 1 -- Fully transparent background
-ironButton.Position = UDim2.new(0, 10, 0, 90)
-ironButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
-ironButton.Font = Enum.Font.SourceSans
-ironButton.Text = "Collect Iron"
-ironButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-ironButton.TextSize = 18
-ironButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
-ironButton.Parent = collectFrame
-
 ironButton.MouseButton1Click:Connect(function()
     local ironCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
     local irons = game.Workspace.PickupableItems:FindFirstChild("Iron")
@@ -208,7 +216,8 @@ ironButton.MouseButton1Click:Connect(function()
     end
 end)
 
-collectButton.MouseButton1Click:Connect(function()
+-- Section button functionality
+sectionButtons[1].MouseButton1Click:Connect(function()
     collectFrame.Visible = not collectFrame.Visible
 end)
 
