@@ -1,0 +1,195 @@
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "SampleGui"
+screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local mainFrame = Instance.new("Frame")
+mainFrame.BackgroundColor3 = Color3.fromRGB(128, 128, 128) -- Gray color
+mainFrame.BackgroundTransparency = 0.5 -- 50% transparent
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
+mainFrame.Size = UDim2.new(0, 300, 0, 150) -- Increased size
+mainFrame.Parent = screenGui
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 15)
+uiCorner.Parent = mainFrame
+
+local uiStroke = Instance.new("UIStroke")
+uiStroke.Color = Color3.fromRGB(255, 255, 255) -- White color
+uiStroke.Thickness = 2
+uiStroke.Parent = mainFrame
+
+local closeButton = Instance.new("TextButton")
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red color
+closeButton.Position = UDim2.new(1, -30, 0, 5)
+closeButton.Size = UDim2.new(0, 25, 0, 25)
+closeButton.Font = Enum.Font.SourceSans
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+closeButton.TextSize = 18
+closeButton.Parent = mainFrame
+
+local reopenButton = Instance.new("TextButton")
+reopenButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+reopenButton.BackgroundTransparency = 1 -- Fully transparent background
+reopenButton.Position = UDim2.new(0.5, -60, 0.5, -20)
+reopenButton.Size = UDim2.new(0, 120, 0, 40)
+reopenButton.Font = Enum.Font.SourceSans
+reopenButton.Text = "Open Menu"
+reopenButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+reopenButton.TextSize = 24
+reopenButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+reopenButton.Visible = false
+reopenButton.Parent = screenGui
+
+local collectButton = Instance.new("TextButton")
+collectButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+collectButton.BackgroundTransparency = 1 -- Fully transparent background
+collectButton.Position = UDim2.new(0, 0, 0, 0)
+collectButton.Size = UDim2.new(1, 0, 0, 40) -- Adjusted height
+collectButton.Font = Enum.Font.SourceSans
+collectButton.Text = "Collect"
+collectButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+collectButton.TextSize = 24
+collectButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+collectButton.Parent = mainFrame
+
+local collectFrame = Instance.new("Frame")
+collectFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200) -- Light gray color
+collectFrame.BackgroundTransparency = 0.5 -- 50% transparent
+collectFrame.Position = UDim2.new(0, 0, 0, 40)
+collectFrame.Size = UDim2.new(1, 0, 1, -40) -- Adjusted size
+collectFrame.Visible = false
+collectFrame.Parent = mainFrame
+
+local collectFrameCorner = Instance.new("UICorner")
+collectFrameCorner.CornerRadius = UDim.new(0, 15)
+collectFrameCorner.Parent = collectFrame
+
+-- Diamond button
+local diamondButton = Instance.new("TextButton")
+diamondButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+diamondButton.BackgroundTransparency = 1 -- Fully transparent background
+diamondButton.Position = UDim2.new(0, 10, 0, 10)
+diamondButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
+diamondButton.Font = Enum.Font.SourceSans
+diamondButton.Text = "Collect Diamonds"
+diamondButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+diamondButton.TextSize = 18
+diamondButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+diamondButton.Parent = collectFrame
+
+diamondButton.MouseButton1Click:Connect(function()
+    local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+    local diamonds = game.Workspace.PickupableItems:FindFirstChild("Diamond")
+    if diamonds then
+        for _, v in pairs(diamonds:GetChildren()) do
+            if v then
+                Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                wait(0.5)
+                Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
+            end
+        end
+    end
+end)
+
+-- Emerald button
+local emeraldButton = Instance.new("TextButton")
+emeraldButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+emeraldButton.BackgroundTransparency = 1 -- Fully transparent background
+emeraldButton.Position = UDim2.new(0, 160, 0, 10)
+emeraldButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
+emeraldButton.Font = Enum.Font.SourceSans
+emeraldButton.Text = "Collect Emeralds"
+emeraldButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+emeraldButton.TextSize = 18
+emeraldButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+emeraldButton.Parent = collectFrame
+
+emeraldButton.MouseButton1Click:Connect(function()
+    local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+    local emeralds = game.Workspace.PickupableItems:FindFirstChild("Emerald")
+    if emeralds then
+        for _, v in pairs(emeralds:GetChildren()) do
+            if v then
+                Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                wait(0.5)
+                Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
+            end
+        end
+    end
+end)
+
+-- Iron button
+local ironButton = Instance.new("TextButton")
+ironButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+ironButton.BackgroundTransparency = 1 -- Fully transparent background
+ironButton.Position = UDim2.new(0, 10, 0, 50)
+ironButton.Size = UDim2.new(0, 130, 0, 30) -- Adjust size and position as needed
+ironButton.Font = Enum.Font.SourceSans
+ironButton.Text = "Collect Iron"
+ironButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+ironButton.TextSize = 18
+ironButton.TextStrokeTransparency = 0 -- Optional: Adds an outline to the text
+ironButton.Parent = collectFrame
+
+ironButton.MouseButton1Click:Connect(function()
+    local ironCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+    local irons = game.Workspace.PickupableItems:FindFirstChild("Iron")
+    if irons then
+        for _, v in pairs(irons:GetChildren()) do
+            if v then
+                -- Teleport iron items to player's CFrame
+                v.CFrame = ironCFrame
+            end
+        end
+    end
+end)
+
+collectButton.MouseButton1Click:Connect(function()
+    collectFrame.Visible = not collectFrame.Visible
+end)
+
+-- Close button functionality
+closeButton.MouseButton1Click:Connect(function()
+    mainFrame.Visible = false
+    reopenButton.Visible = true
+end)
+
+-- Reopen button functionality
+reopenButton.MouseButton1Click:Connect(function()
+    mainFrame.Visible = true
+    reopenButton.Visible = false
+end)
+
+-- Draggable functionality for MainFrame
+local dragging = false
+local dragStart
+local startPos
+
+local function onInputBegan(input)
+    if input.UserInputType == Enum.UserInputType.Touch and input.Target == mainFrame then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+    end
+end
+
+local function onInputChanged(inputChanged)
+    if dragging and inputChanged.UserInputType == Enum.UserInputType.Touch then
+        local delta = inputChanged.Position - dragStart
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end
+
+local function onInputEnded(inputEnded)
+    if inputEnded.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end
+
+UserInputService.InputBegan:Connect(onInputBegan)
+UserInputService.InputChanged:Connect(onInputChanged)
+UserInputService.InputEnded:Connect(onInputEnded)
