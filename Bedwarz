@@ -255,6 +255,15 @@ local function toggleKillAura()
     end
 end
 
+function updateSwordName()
+swordName = getSwordName()
+end
+
+while true do
+updateSwordName()
+wait(1)
+end
+
 -- Toggle Fly
 local flyEnabled = false
 
