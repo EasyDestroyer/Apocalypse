@@ -257,7 +257,7 @@ local function toggleKillAura()
 end
 
 function updateSwordName()
-swordName = getSwordName()
+getSwordName()
 end
 
 if backpack:FindFirstChild("Diamond Sword") then
