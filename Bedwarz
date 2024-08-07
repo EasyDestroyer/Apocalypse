@@ -16,9 +16,9 @@ mainFrame.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
 mainFrame.BackgroundTransparency = 0.5
 mainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
 mainFrame.Size = UDim2.new(0, 300, 0, 200)
+mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
--- Create UI corner and stroke for main frame
 local uiCorner = Instance.new("UICorner")
 uiCorner.CornerRadius = UDim.new(0, 15)
 uiCorner.Parent = mainFrame
@@ -132,12 +132,27 @@ xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 xButton.BackgroundTransparency = 0.5
 xButton.Position = UDim2.new(1, -30, 0, 0)
 xButton.Size = UDim2.new(0, 30, 0, 30)
+xButton.AnchorPoint = Vector2.new(1, 0)
 xButton.Font = Enum.Font.SourceSans
 xButton.Text = "X"
 xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 xButton.TextSize = 24
 xButton.TextStrokeTransparency = 0
-xButton.Parent = mainFrame
+xButton.Parent = screenGui
+
+-- Create the Show button
+local showButton = Instance.new("TextButton")
+showButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+showButton.BackgroundTransparency = 0.5
+showButton.Position = UDim2.new(1, -70, 0, 0)
+showButton.Size = UDim2.new(0, 60, 0, 30)
+showButton.AnchorPoint = Vector2.new(1, 0)
+showButton.Font = Enum.Font.SourceSans
+showButton.Text = "Show"
+showButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+showButton.TextSize = 18
+showButton.TextStrokeTransparency = 0
+showButton.Parent = screenGui
 
 -- Show/Hide frames based on tab selection
 collectButton.MouseButton1Click:Connect(function()
@@ -156,6 +171,11 @@ local function toggleMainFrameVisibility()
 end
 
 xButton.MouseButton1Click:Connect(toggleMainFrameVisibility)
+
+-- Toggle visibility with Show button
+showButton.MouseButton1Click:Connect(function()
+    mainFrame.Visible = true
+end)
 
 -- Define getSwordName function
 local function getSwordName()
@@ -184,13 +204,13 @@ local function findClosestPlayer(maxDistance)
         if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
             local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
             if distance < shortestDistance then
-                closestPlayer = player.Character
+                closestPlayer = player
                 shortestDistance = distance
             end
         end
     end
 
-    return closestPlayer
+    return closestPlayer and closestPlayer.Character
 end
 
 -- Toggle Kill Aura
@@ -206,7 +226,7 @@ local function toggleKillAura()
         killAuraConnection = RunService.Heartbeat:Connect(function()
             if killAuraEnabled then
                 local target = findClosestPlayer(18)
-                if target and target:FindFirstChild("HumanoidRootPart") then
+                if target then
                     local swordName = getSwordName()
                     local args = {target, swordName}
                     ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
@@ -283,5 +303,5 @@ end
 nukerButton.MouseButton1Click:Connect(toggleNuker)
 
 -- Cleanup
-game.Players.LocalPlayer.Anticheat:Destroy()
+Players.LocalPlayer.Anticheat:Destroy()
 game.StarterPlayer.StarterPlayerScripts.Anticheat:Destroy()
