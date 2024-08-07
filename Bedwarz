@@ -305,19 +305,6 @@ end
 
 local walkSpeedEnabled = false
 
-local function toggleWalkSpeed()
-    walkSpeedEnabled = not walkSpeedEnabled
-    walkSpeedButton.BackgroundColor3 = walkSpeedEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
-    walkSpeedButton.BackgroundTransparency = walkSpeedEnabled and 0 or 1
-
-if walkSpeedEnabled then
-while wait(1) do
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 22
-end
-
-
-walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
-
 local bowAuraEnabled = false
 local bowAuraConnection
 
