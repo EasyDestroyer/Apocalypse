@@ -505,6 +505,30 @@ killAuraButton.MouseButton1Click:Connect(toggleKillAura)
 flyButton.MouseButton1Click:Connect(toggleFly)
 nukerButton.MouseButton1Click:Connect(toggleNuker)
 
+-- anti staff
+
+local Players = game:GetService("Players")
+local GroupId = 6058740 -- Replace with your group ID
+
+local function checkAndKick()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player:IsInGroup(GroupId) then
+            local rank = player:GetRankInGroup(GroupId)
+            if rank >= 2 then
+                -- Kick the local player if any player has rank 2 or higher
+                Players.LocalPlayer:Kick("Kicked because a player with rank 2 or higher was detected.")
+                return
+            end
+        end
+    end
+end
+
+-- Run the check in a loop
+while true do
+    checkAndKick()
+    wait(0.1) -- Adjust the wait time as needed
+end
+
 -- Cleanup
 Players.LocalPlayer.Character.Anticheat:Destroy()
 game.StarterPlayer.StarterCharacterScripts.Anticheat:Destroy()
