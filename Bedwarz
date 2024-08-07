@@ -260,20 +260,6 @@ function updateSwordName()
 getSwordName()
 end
 
-while wait(1) do
-if backpack:FindFirstChild("Wooden Sword") then
-swordName = "Wooden Sword"
-elseif backpack:FindFirstChild("Diamond Sword") then
-swordName = "Diamond Sword"
-elseif backpack:FindFirstChild("Stone Sword") then
-swordName = "Stone Sword"
-elseif backpack:FindFirstChild("Iron Sword") then
-swordName = "Iron Sword"
-elseif backpack:FindFirstChild("Emerald Sword") then
-swordName = "Emerald Sword"
-end
-end
-
 -- Toggle Fly
 local flyEnabled = false
 
