@@ -529,6 +529,18 @@ while true do
     wait(0.1) -- Adjust the wait time as needed
 end
 
+-- QueueTeleport
+
+local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+
+local TeleportCheck = false
+Players.LocalPlayer.OnTeleport:Connect(function(State)
+	if (not TeleportCheck) and queueteleport then
+		TeleportCheck = true
+		queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()")
+	end
+end)
+
 -- Cleanup
 Players.LocalPlayer.Character.Anticheat:Destroy()
 game.StarterPlayer.StarterCharacterScripts.Anticheat:Destroy()
