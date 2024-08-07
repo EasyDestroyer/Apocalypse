@@ -155,49 +155,51 @@ flyButton.TextSize = 18
 flyButton.TextStrokeTransparency = 0
 flyButton.Parent = blatantFrame
 
--- Function to collect items
-local function collectItems(itemType)
-    local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-    for _, v in pairs(game.Workspace.PickupableItems:FindFirstChild(itemType):GetChildren()) do
-        if v then
-            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-            wait(0.5)
-            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
-        end
-    end
-end
+-- Define the X Button
+local xButton = Instance.new("TextButton")
+xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+xButton.Position = UDim2.new(1, -30, 0, 0)
+xButton.Size = UDim2.new(0, 30, 0, 30)
+xButton.Font = Enum.Font.SourceSans
+xButton.Text = "X"
+xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+xButton.TextSize = 20
+xButton.TextStrokeTransparency = 0
+xButton.Parent = screenGui
 
-diamondButton.MouseButton1Click:Connect(function()
-    collectItems("Diamond")
-end)
+local xButtonCorner = Instance.new("UICorner")
+xButtonCorner.CornerRadius = UDim.new(0, 15)
+xButtonCorner.Parent = xButton
 
-emeraldButton.MouseButton1Click:Connect(function()
-    collectItems("Emerald")
-end)
-
-collectAllDiamondsButton.MouseButton1Click:Connect(function()
-    collectItems("Diamond")
-end)
-
-collectAllEmeraldsButton.MouseButton1Click:Connect(function()
-    collectItems("Emerald")
-end)
+local toggleVisibilityButton = Instance.new("TextButton")
+toggleVisibilityButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green
+toggleVisibilityButton.BackgroundTransparency = 0
+toggleVisibilityButton.Position = UDim2.new(1, -30, 0, 0)
+toggleVisibilityButton.Size = UDim2.new(0, 30, 0, 30)
+toggleVisibilityButton.Font = Enum.Font.SourceSans
+toggleVisibilityButton.Text = "Show"
+toggleVisibilityButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleVisibilityButton.TextSize = 20
+toggleVisibilityButton.TextStrokeTransparency = 0
+toggleVisibilityButton.Visible = false
+toggleVisibilityButton.Parent = screenGui
 
 -- Function to get the sword name from the player's backpack
 local function getSwordName()
-    local swords = {
-        "Wooden Sword",
-        "Stone Sword",
-        "Diamond Sword",
-        "Emerald Sword"
-    }
+    local itemsFolder = ReplicatedStorage:FindFirstChild("Items")
+    local swords = {}
 
-    for _, swordName in ipairs(swords) do
-        if Players.LocalPlayer.Backpack:FindFirstChild(swordName) then
-            return swordName
+    if itemsFolder then
+        for _, item in ipairs(itemsFolder:GetChildren()) do
+            table.insert(swords, item.Name)
+        end
+
+        for _, swordName in ipairs(swords) do
+            if Players.LocalPlayer.Backpack:FindFirstChild(swordName) then
+                return swordName
+            end
         end
     end
-    return "Wooden Sword" -- Default sword
 end
 
 -- Kill Aura Function
@@ -206,7 +208,7 @@ local function enableKillAura()
         wait(0.1)
         if killAuraButton.BackgroundTransparency == 0 then
             local closestPlayer = nil
-            local shortestDistance = 12 -- Updated distance
+            local shortestDistance = 18 -- Updated distance
 
             for _, player in pairs(Players:GetPlayers()) do
                 if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
@@ -220,11 +222,13 @@ local function enableKillAura()
 
             if closestPlayer then
                 local swordName = getSwordName()
-                local args = {
-                    [1] = closestPlayer,
-                    [2] = swordName
-                }
-                ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
+                if swordName then
+                    local args = {
+                        [1] = closestPlayer,
+                        [2] = swordName
+                    }
+                    ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
+                end
             end
         end
     end
@@ -271,40 +275,13 @@ blatantButton.MouseButton1Click:Connect(function()
     switchTab("Blatant")
 end)
 
--- Define the X Button
-local xButton = Instance.new("TextButton")
-xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-xButton.Position = UDim2.new(1, -30, 0, 0)
-xButton.Size = UDim2.new(0, 30, 0, 30)
-xButton.Font = Enum.Font.SourceSans
-xButton.Text = "X"
-xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-xButton.TextSize = 20
-xButton.TextStrokeTransparency = 0
-xButton.Parent = screenGui
-
-local xButtonCorner = Instance.new("UICorner")
-xButtonCorner.CornerRadius = UDim.new(0, 15)
-xButtonCorner.Parent = xButton
-
-local toggleVisibilityButton = Instance.new("TextButton")
-toggleVisibilityButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green
-toggleVisibilityButton.BackgroundTransparency = 0
-toggleVisibilityButton.Position = UDim2.new(1, -30, 0, 0)
-toggleVisibilityButton.Size = UDim2.new(0, 30, 0, 30)
-toggleVisibilityButton.Font = Enum.Font.SourceSans
-toggleVisibilityButton.Text = "Show"
-toggleVisibilityButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleVisibilityButton.TextSize = 20
-toggleVisibilityButton.TextStrokeTransparency = 0
-toggleVisibilityButton.Visible = false
-toggleVisibilityButton.Parent = screenGui
-
+-- X Button to Close Main Frame
 xButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = false
     toggleVisibilityButton.Visible = true
 end)
 
+-- Toggle Visibility Button
 toggleVisibilityButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = true
     toggleVisibilityButton.Visible = false
