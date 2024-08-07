@@ -29,6 +29,7 @@ local tabContainer = Instance.new("Frame")
 tabContainer.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 tabContainer.BackgroundTransparency = 0.5
 tabContainer.Size = UDim2.new(1, 0, 0, 40)
+tabContainer.Position = UDim2.new(0, 0, 0, 0)
 tabContainer.Parent = mainFrame
 
 local tabCorner = Instance.new("UICorner")
@@ -203,7 +204,7 @@ end
 local function enableKillAura()
     while true do
         wait(0.1)
-        if not killAuraButton.BackgroundTransparency == 0 then
+        if killAuraButton.BackgroundTransparency == 0 then
             local closestPlayer = nil
             local shortestDistance = 2
 
@@ -243,7 +244,6 @@ end)
 
 -- Fly Function
 local isFlying = false
-local flyButtonToggle = false
 
 flyButton.MouseButton1Click:Connect(function()
     if not isFlying then
@@ -313,7 +313,7 @@ end)
 -- Function to make the frame draggable for mobile users
 local function makeFrameDraggable(frame)
     local userInputService = game:GetService("UserInputService")
-    local dragging, dragInput, startPos, startSize
+    local dragging, dragInput, startPos
 
     local function update(input)
         local delta = input.Position - dragInput.Position
