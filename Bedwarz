@@ -556,7 +556,7 @@ end)
 -- Commands
 
 
-
+loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/Commands"))()
 
 
 
