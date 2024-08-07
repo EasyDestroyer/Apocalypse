@@ -177,182 +177,188 @@ xButton.Size = UDim2.new(0, 30, 0, 30)
 xButton.Font = Enum.Font.SourceSans
 xButton.Text = "X"
 xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-xButton.TextSize = 20
+xButton.TextSize = 24
 xButton.TextStrokeTransparency = 0
-xButton.Parent = screenGui
+xButton.Parent = mainFrame
 
-local xButtonCorner = Instance.new("UICorner")
-xButtonCorner.CornerRadius = UDim.new(0, 15)
-xButtonCorner.Parent = xButton
-
-local toggleVisibilityButton = Instance.new("TextButton")
-toggleVisibilityButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green
-toggleVisibilityButton.BackgroundTransparency = 0
-toggleVisibilityButton.Position = UDim2.new(1, -30, 0, 0)
-toggleVisibilityButton.Size = UDim2.new(0, 30, 0, 30)
-toggleVisibilityButton.Font = Enum.Font.SourceSans
-toggleVisibilityButton.Text = "+"
-toggleVisibilityButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleVisibilityButton.TextSize = 20
-toggleVisibilityButton.TextStrokeTransparency = 0
-toggleVisibilityButton.Parent = screenGui
-
--- Toggle visibility functions
-local function toggleFrameVisibility()
-    mainFrame.Visible = not mainFrame.Visible
-    toggleVisibilityButton.Text = mainFrame.Visible and "-" or "+"
-end
-
-toggleVisibilityButton.MouseButton1Click:Connect(toggleFrameVisibility)
-
-xButton.MouseButton1Click:Connect(function()
-    mainFrame.Visible = false
-    toggleVisibilityButton.Visible = true
-end)
-
--- Set initial visibility
-toggleVisibilityButton.Visible = false
-
--- Define tab functionality
-local function showFrame(frameToShow)
-    collectFrame.Visible = frameToShow == collectFrame
-    blatantFrame.Visible = frameToShow == blatantFrame
-end
-
+-- Define the Collect and Blatant button toggles
 collectButton.MouseButton1Click:Connect(function()
-    showFrame(collectFrame)
+    collectFrame.Visible = true
+    blatantFrame.Visible = false
 end)
 
 blatantButton.MouseButton1Click:Connect(function()
-    showFrame(blatantFrame)
+    collectFrame.Visible = false
+    blatantFrame.Visible = true
 end)
 
--- Define functionality for buttons
+-- Define the X button functionality
+local function toggleMainFrameVisibility()
+    mainFrame.Visible = not mainFrame.Visible
+end
+
+xButton.MouseButton1Click:Connect(toggleMainFrameVisibility)
+
+-- Define Kill Aura
 local function getSwordName()
-    local swords = {
-        "Wooden Sword",
-        "Stone Sword",
-        "Diamond Sword",
-        "Emerald Sword"
-    }
-    local player = Players.LocalPlayer
-    local backpack = player.Backpack
-    local swordName = "Wooden Sword"
-    
+    local itemsFolder = ReplicatedStorage:WaitForChild("Items")
+    local swords = {}
+
+    for _, v in pairs(itemsFolder:GetChildren()) do
+        table.insert(swords, v.Name)
+    end
+
     for _, sword in pairs(swords) do
-        if backpack:FindFirstChild(sword) then
-            swordName = sword
-            break
+        if Players.LocalPlayer.Backpack:FindFirstChild(sword) then
+            return sword
         end
     end
     
-    return swordName
+    return "Wooden Sword"
 end
 
-local function findClosestBed()
-    local closestBed = nil
-    local shortestDistance = 15
-    local playerPosition = Players.LocalPlayer.Character.HumanoidRootPart.Position
-    
-    for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
-        local distance = (bed.Position - playerPosition).magnitude
-        if distance < shortestDistance then
-            shortestDistance = distance
-            closestBed = bed
+local function findClosestPlayer(maxDistance)
+    local closestPlayer = nil
+    local shortestDistance = maxDistance
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+            if distance < shortestDistance then
+                closestPlayer = player.Character
+                shortestDistance = distance
+            end
         end
     end
-    
-    return closestBed
+
+    return closestPlayer
 end
 
-local function onKillAuraToggle()
-    local killAuraEnabled = false
-    killAuraButton.BackgroundTransparency = 1
-    
-    local function updateKillAura()
-        while killAuraEnabled do
-            local closestPlayer = nil
-            local shortestDistance = 18
-            local playerPosition = Players.LocalPlayer.Character.HumanoidRootPart.Position
-            
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                    local distance = (player.Character.HumanoidRootPart.Position - playerPosition).magnitude
-                    if distance < shortestDistance and not player.Neutral and player.Team ~= Players.LocalPlayer.Team then
-                        shortestDistance = distance
-                        closestPlayer = player
-                    end
+local killAuraEnabled = false
+local killAuraConnection
+
+local function toggleKillAura()
+    killAuraEnabled = not killAuraEnabled
+    killAuraButton.BackgroundColor3 = killAuraEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+
+    if killAuraEnabled then
+        killAuraConnection = RunService.Heartbeat:Connect(function()
+            if killAuraEnabled then
+                local target = findClosestPlayer(18)
+                if target and target:FindFirstChild("HumanoidRootPart") then
+                    local swordName = getSwordName()
+                    local args = {target, swordName}
+                    ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
                 end
             end
-            
-            if closestPlayer then
-                local args = {
-                    [1] = closestPlayer.Character,
-                    [2] = getSwordName()
-                }
-                ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
+        end)
+    else
+        if killAuraConnection then
+            killAuraConnection:Disconnect()
+        end
+    end
+end
+
+killAuraButton.MouseButton1Click:Connect(toggleKillAura)
+
+-- Define Fly
+local flyEnabled = false
+local flyConnection
+
+local function toggleFly()
+    flyEnabled = not flyEnabled
+    flyButton.BackgroundColor3 = flyEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+
+    if flyEnabled then
+        Workspace.Gravity = 0
+    else
+        Workspace.Gravity = 196.2
+    end
+end
+
+flyButton.MouseButton1Click:Connect(toggleFly)
+
+-- Define Nuker
+local nukerEnabled = false
+local nukerConnection
+
+local function toggleNuker()
+    nukerEnabled = not nukerEnabled
+    nukerButton.BackgroundColor3 = nukerEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+
+    if nukerEnabled then
+        nukerConnection = RunService.Heartbeat:Connect(function()
+            if nukerEnabled then
+                local closestBed = nil
+                local shortestDistance = 15
+                for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
+                    local distance = (bed.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                    if distance < shortestDistance then
+                        closestBed = bed
+                        shortestDistance = distance
+                    end
+                end
+
+                if closestBed then
+                    local args = {closestBed, "Wooden Pickaxe"}
+                    ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
+                end
             end
-            
+        end)
+    else
+        if nukerConnection then
+            nukerConnection:Disconnect()
+        end
+    end
+end
+
+nukerButton.MouseButton1Click:Connect(toggleNuker)
+
+-- Handle Collect Buttons
+diamondButton.MouseButton1Click:Connect(function()
+    for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Diamond"):GetChildren()) do
+        if v then
+            local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
             wait(0.5)
+            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
         end
     end
-    
-    killAuraButton.MouseButton1Click:Connect(function()
-        killAuraEnabled = not killAuraEnabled
-        killAuraButton.BackgroundTransparency = killAuraEnabled and 0 or 1
-        if killAuraEnabled then
-            updateKillAura()
-        end
-    end)
-end
+end)
 
-local function onFlyToggle()
-    local flying = false
-    flyButton.BackgroundTransparency = 1
-    
-    flyButton.MouseButton1Click:Connect(function()
-        flying = not flying
-        flyButton.BackgroundTransparency = flying and 0 or 1
-        if flying then
-            game.Workspace.Gravity = 0
-        else
-            game.Workspace.Gravity = 196.2
-        end
-    end)
-end
-
-local function onNukerToggle()
-    local nukerEnabled = false
-    nukerButton.BackgroundTransparency = 1
-    
-    local function updateNuker()
-        while nukerEnabled do
-            local closestBed = findClosestBed()
-            if closestBed then
-                local args = {
-                    [1] = closestBed,
-                    [2] = getSwordName()
-                }
-                ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
-            end
-            wait(1)
+emeraldButton.MouseButton1Click:Connect(function()
+    for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Emerald"):GetChildren()) do
+        if v then
+            local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+            wait(0.5)
+            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
         end
     end
-    
-    nukerButton.MouseButton1Click:Connect(function()
-        nukerEnabled = not nukerEnabled
-        nukerButton.BackgroundTransparency = nukerEnabled and 0 or 1
-        if nukerEnabled then
-            updateNuker()
+end)
+
+collectAllDiamondsButton.MouseButton1Click:Connect(function()
+    for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Diamond"):GetChildren()) do
+        if v then
+            local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+            wait(0.5)
+            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
         end
-    end)
-end
+    end
+end)
 
--- Call the functions to initialize
-onKillAuraToggle()
-onFlyToggle()
-onNukerToggle()
+collectAllEmeraldsButton.MouseButton1Click:Connect(function()
+    for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Emerald"):GetChildren()) do
+        if v then
+            local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+            wait(0.5)
+            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
+        end
+    end
+end)
 
--- Cleanup
+-- Clean up
 game.Players.LocalPlayer.Anticheat:Destroy()
 game.StarterPlayer.StarterPlayerScripts.Anticheat:Destroy()
