@@ -540,6 +540,10 @@ while true do
     wait(0.1) -- Adjust the wait time as needed
 end
 
+-- Commands
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/Commands"))()
+
 
 -- QueueTeleport
 
@@ -552,13 +556,6 @@ Players.LocalPlayer.OnTeleport:Connect(function(State)
 		queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/Bedwarz'))()")
 	end
 end)
-
--- Commands
-
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/Commands"))()
-
-
 
 -- Cleanup
 Players.LocalPlayer.Character.Anticheat:Destroy()
