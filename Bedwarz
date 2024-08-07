@@ -380,7 +380,9 @@ local args = {
     [2] = "Wooden Pickaxe"
 }
 
-ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
+for i = 1, 200 do
+    ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
+end
 end
 
 wait(1)
@@ -391,7 +393,7 @@ local args = {
 }
 
 for _, player in ipairs(Players:GetPlayers()) do
-    if player ~= players.LocalPlayer then
+    if player ~= Players.LocalPlayer then
         table.insert(args[1], player.Character)
     end
 end
