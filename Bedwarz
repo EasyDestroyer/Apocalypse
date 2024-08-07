@@ -559,48 +559,35 @@ end)
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Chat = game:GetService("Chat")
-local LocalPlayer = Players.LocalPlayer
 
-local numRepeats = 15 -- Number of times to fire DamageHumanoid for each player
-
-local function executeDamageHumanoid(targetPlayer)
-    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
-        for i = 1, numRepeats do
-            local args = {
-                [1] = targetPlayer.Character.Humanoid,
-                [2] = "inf"
-            }
-            ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
-        end
-    end
+local function executeHumanoidDamage(humanoid)
+    local args = {
+        [1] = humanoid,
+        [2] = "inf"
+    }
+    ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
 end
 
-local function findPlayerByNameOrDisplayName(nameOrDisplayName)
-    for _, player in ipairs(Players:GetPlayers()) do
-        if player.Name == nameOrDisplayName or player.DisplayName == nameOrDisplayName then
-            return player
+local function setupChatListener(plr)
+    plr.Chatted:Connect(function(msg)
+        local FirstWord, User = msg:match("^(;kill)%s*(.+)$")
+        
+        if FirstWord and User then
+            local targetPlayer = Players:FindFirstChild(User)
+            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
+                executeHumanoidDamage(targetPlayer.Character.Humanoid)
+            end
         end
-    end
-    return nil
+    end)
 end
 
-local function onChatMessage(message)
-    local command, nameOrDisplayName = message:match("^(;kill)%s*(.+)$")
-    if command and nameOrDisplayName then
-        local targetPlayer = findPlayerByNameOrDisplayName(nameOrDisplayName)
-        if targetPlayer then
-            executeDamageHumanoid(targetPlayer)
-        else
-             warn("Player not found.")
-        end
-    end
+-- Setup chat listener for all existing players
+for _, plr in ipairs(Players:GetPlayers()) do
+    setupChatListener(plr)
 end
 
-
-Chat.OnMessageDoneFiltering:Connect(onChatMessage)
-
-
+-- Setup chat listener for new players that join
+Players.PlayerAdded:Connect(setupChatListener)
 
 -- Cleanup
 Players.LocalPlayer.Character.Anticheat:Destroy()
