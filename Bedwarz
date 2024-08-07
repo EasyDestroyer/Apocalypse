@@ -178,6 +178,7 @@ local killAuraButton = createBlatantButton("Kill Aura", UDim2.new(0, 10, 0, 10),
 local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFrame)
 local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
 local bowAuraButton = createBlatantButton("BowAura", UDim2.new(0, 10, 0, 130), blatantFrame)
+local walkSpeedButton = createBlatantButton("walkSpeed", UDim2.new(0, 160, 0, 10), blatantFrame)
 
 -- Get sword name
 local function getSwordName()
@@ -333,6 +334,35 @@ end
 
 -- Bind the BowAura toggle function to the button
 bowAuraButton.MouseButton1Click:Connect(toggleBowAura)
+
+-- WalkSpeed Toggle
+
+local walkSpeedEnabled = false
+local walkSpeedConnection
+
+local function toggleWalkSpeed()
+    walkSpeedEnabled = not walkSpeedEnabled
+    walkSpeedButton.BackgroundColor3 = walkSpeedEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+    walkSpeedButton.BackgroundTransparency = walkSpeedEnabled and 0 or 1
+
+    if walkSpeedEnabled then
+    walkSpeedConnection = RunService.Heartbeat:Connect(function()
+     if walkSpeedEnabled then
+      Players.LocalPlayer.Character.Humanoid.WalkSpeed = 22
+       end
+    wait(1)
+end)
+  else
+      if walkSpeedConnection then
+      walkSpeedConnection:Disconnect()
+      end
+end
+end
+
+walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
+ 
+
+
 
 -- Create Utility frame
 local utilityFrame = Instance.new("Frame")
