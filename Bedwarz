@@ -174,6 +174,7 @@ end
 local killAuraButton = createBlatantButton("Kill Aura", UDim2.new(0, 10, 0, 10), blatantFrame)
 local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFrame)
 local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
+local bowAuraButton = createBlatantButton("BowAura", UDim2.new(0, 10, 0, 130), blatantFrame)
 
 -- Get sword name
 local function getSwordName()
@@ -296,6 +297,39 @@ local function toggleNuker()
     end
 end
 
+local bowAuraEnabled = false
+local bowAuraConnection
+
+local function toggleBowAura()
+    bowAuraEnabled = not bowAuraEnabled
+    bowAuraButton.BackgroundColor3 = bowAuraEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+    bowAuraButton.BackgroundTransparency = bowAuraEnabled and 0 or 1
+
+    if bowAuraEnabled then
+        bowAuraConnection = RunService.Heartbeat:Connect(function()
+            if bowAuraEnabled then
+                local target = findClosestPlayer(100)
+                if target then
+                    local args = {
+                        [1] = Players.LocalPlayer.Character.HumanoidRootPart.Position,
+                        [2] = target.Character.HumanoidRootPart.Position,
+                        [3] = 199.33388233184814
+                    }
+                    ReplicatedStorage.Remotes.Bow.ShootArrow:FireServer(unpack(args))
+                end
+                wait(1) -- Delay to prevent spam
+            end
+        end)
+    else
+        if bowAuraConnection then
+            bowAuraConnection:Disconnect()
+        end
+    end
+end
+
+-- Bind the BowAura toggle function to the button
+bowAuraButton.MouseButton1Click:Connect(toggleBowAura)
+
 -- Create the X button
 -- Create the X button
 local xButton = Instance.new("TextButton")
@@ -359,3 +393,5 @@ nukerButton.MouseButton1Click:Connect(toggleNuker)
 -- Cleanup
 Players.LocalPlayer.Anticheat:Destroy()
 game.StarterPlayer.StarterPlayerScripts.Anticheat:Destroy()
+
+
