@@ -12,7 +12,7 @@ local Workspace = game:GetService("Workspace")
 -- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "SampleGui"
-screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+screenGui.Parent = game.CoreGui
 screenGui.ResetOnSpawn = false
 
 -- Create the main frame
