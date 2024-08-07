@@ -374,7 +374,6 @@ walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 -- Instant Win Function
 
 function instantwin()
-if game.Workspace.Map.Beds:FindFirstChild("Bed") then
 local args = {
     [1] = game.Workspace.Map.Beds.Bed,
     [2] = "Wooden Pickaxe"
@@ -382,7 +381,6 @@ local args = {
 
 for i = 1, 200 do
     ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
-end
 end
 
 wait(1)
