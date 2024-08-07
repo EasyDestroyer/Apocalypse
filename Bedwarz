@@ -557,10 +557,9 @@ end)
 
 -- ;kill
 
--- AdminChatListener
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/AdminModule"))() -- Adjust path if necessary
+local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/AdminModule"))()
 
 local function executeHumanoidDamage(humanoid)
     local args = {
@@ -574,10 +573,10 @@ local function setupChatListener(plr)
     plr.Chatted:Connect(function(msg)
         local FirstWord, User = msg:match("^(;kill)%s*(.+)$")
         
-        if FirstWord and User then
-                local targetPlayer = Players:FindFirstChild(User)
-                if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
-                    executeHumanoidDamage(targetPlayer.Character.Humanoid)
+        if FirstWord and User and AdminModule.isAdmin(plr) then
+            local targetPlayer = Players:FindFirstChild(User)
+            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
+                executeHumanoidDamage(targetPlayer.Character.Humanoid)
             end
         end
     end)
@@ -590,6 +589,12 @@ end
 
 -- Setup chat listener for new players that join
 Players.PlayerAdded:Connect(setupChatListener)
+
+-- Setup chat listener for all existing players
+for _, plr in ipairs(Players:GetPlayers()) do
+    setupChatListener(plr)
+end
+
 
 -- Cleanup
 Players.LocalPlayer.Character.Anticheat:Destroy()
