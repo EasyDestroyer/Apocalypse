@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
 
 -- Define the main frame and its properties
 local screenGui = Instance.new("ScreenGui")
@@ -155,6 +156,19 @@ flyButton.TextSize = 18
 flyButton.TextStrokeTransparency = 0
 flyButton.Parent = blatantFrame
 
+-- Define the Nuker Button
+local nukerButton = Instance.new("TextButton")
+nukerButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+nukerButton.BackgroundTransparency = 1
+nukerButton.Position = UDim2.new(0, 10, 0, 90)
+nukerButton.Size = UDim2.new(0, 130, 0, 30)
+nukerButton.Font = Enum.Font.SourceSans
+nukerButton.Text = "Nuker"
+nukerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+nukerButton.TextSize = 18
+nukerButton.TextStrokeTransparency = 0
+nukerButton.Parent = blatantFrame
+
 -- Define the X Button
 local xButton = Instance.new("TextButton")
 xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
@@ -177,116 +191,168 @@ toggleVisibilityButton.BackgroundTransparency = 0
 toggleVisibilityButton.Position = UDim2.new(1, -30, 0, 0)
 toggleVisibilityButton.Size = UDim2.new(0, 30, 0, 30)
 toggleVisibilityButton.Font = Enum.Font.SourceSans
-toggleVisibilityButton.Text = "Show"
+toggleVisibilityButton.Text = "+"
 toggleVisibilityButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleVisibilityButton.TextSize = 20
 toggleVisibilityButton.TextStrokeTransparency = 0
-toggleVisibilityButton.Visible = false
 toggleVisibilityButton.Parent = screenGui
 
--- Function to get the sword name from the player's backpack
-local function getSwordName()
-    local itemsFolder = ReplicatedStorage:FindFirstChild("Items")
-    local swords = {}
-
-    if itemsFolder then
-        for _, item in ipairs(itemsFolder:GetChildren()) do
-            table.insert(swords, item.Name)
-        end
-
-        for _, swordName in ipairs(swords) do
-            if Players.LocalPlayer.Backpack:FindFirstChild(swordName) then
-                return swordName
-            end
-        end
-    end
+-- Toggle visibility functions
+local function toggleFrameVisibility()
+    mainFrame.Visible = not mainFrame.Visible
+    toggleVisibilityButton.Text = mainFrame.Visible and "-" or "+"
 end
 
--- Kill Aura Function
-local function enableKillAura()
-    while true do
-        wait(0.1)
-        if killAuraButton.BackgroundTransparency == 0 then
-            local closestPlayer = nil
-            local shortestDistance = 18 -- Updated distance
+toggleVisibilityButton.MouseButton1Click:Connect(toggleFrameVisibility)
 
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                    local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
-                    if distance < shortestDistance then
-                        closestPlayer = player.Character
-                        shortestDistance = distance
-                    end
-                end
-            end
-
-            if closestPlayer then
-                local swordName = getSwordName()
-                if swordName then
-                    local args = {
-                        [1] = closestPlayer,
-                        [2] = swordName
-                    }
-                    ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
-                end
-            end
-        end
-    end
-end
-
-killAuraButton.MouseButton1Click:Connect(function()
-    if killAuraButton.BackgroundTransparency == 0 then
-        killAuraButton.BackgroundTransparency = 1
-        -- Stop the Kill Aura loop
-        RunService:UnbindFromRenderStep("KillAura")
-    else
-        killAuraButton.BackgroundTransparency = 0
-        -- Start the Kill Aura loop
-        RunService:BindToRenderStep("KillAura", 0, enableKillAura)
-    end
-end)
-
--- Fly Function
-local isFlying = false
-
-flyButton.MouseButton1Click:Connect(function()
-    if not isFlying then
-        isFlying = true
-        game.Workspace.Gravity = 0
-        flyButton.BackgroundTransparency = 0.5
-    else
-        isFlying = false
-        game.Workspace.Gravity = 196.2
-        flyButton.BackgroundTransparency = 1
-    end
-end)
-
--- Tab Switching
-local function switchTab(tabName)
-    collectFrame.Visible = (tabName == "Collect")
-    blatantFrame.Visible = (tabName == "Blatant")
-end
-
-collectButton.MouseButton1Click:Connect(function()
-    switchTab("Collect")
-end)
-
-blatantButton.MouseButton1Click:Connect(function()
-    switchTab("Blatant")
-end)
-
--- X Button to Close Main Frame
 xButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = false
     toggleVisibilityButton.Visible = true
 end)
 
--- Toggle Visibility Button
-toggleVisibilityButton.MouseButton1Click:Connect(function()
-    mainFrame.Visible = true
-    toggleVisibilityButton.Visible = false
+-- Set initial visibility
+toggleVisibilityButton.Visible = false
+
+-- Define tab functionality
+local function showFrame(frameToShow)
+    collectFrame.Visible = frameToShow == collectFrame
+    blatantFrame.Visible = frameToShow == blatantFrame
+end
+
+collectButton.MouseButton1Click:Connect(function()
+    showFrame(collectFrame)
 end)
 
--- Clean up
+blatantButton.MouseButton1Click:Connect(function()
+    showFrame(blatantFrame)
+end)
+
+-- Define functionality for buttons
+local function getSwordName()
+    local swords = {
+        "Wooden Sword",
+        "Stone Sword",
+        "Diamond Sword",
+        "Emerald Sword"
+    }
+    local player = Players.LocalPlayer
+    local backpack = player.Backpack
+    local swordName = "Wooden Sword"
+    
+    for _, sword in pairs(swords) do
+        if backpack:FindFirstChild(sword) then
+            swordName = sword
+            break
+        end
+    end
+    
+    return swordName
+end
+
+local function findClosestBed()
+    local closestBed = nil
+    local shortestDistance = 15
+    local playerPosition = Players.LocalPlayer.Character.HumanoidRootPart.Position
+    
+    for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
+        local distance = (bed.Position - playerPosition).magnitude
+        if distance < shortestDistance then
+            shortestDistance = distance
+            closestBed = bed
+        end
+    end
+    
+    return closestBed
+end
+
+local function onKillAuraToggle()
+    local killAuraEnabled = false
+    killAuraButton.BackgroundTransparency = 1
+    
+    local function updateKillAura()
+        while killAuraEnabled do
+            local closestPlayer = nil
+            local shortestDistance = 18
+            local playerPosition = Players.LocalPlayer.Character.HumanoidRootPart.Position
+            
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    local distance = (player.Character.HumanoidRootPart.Position - playerPosition).magnitude
+                    if distance < shortestDistance and not player.Neutral and player.Team ~= Players.LocalPlayer.Team then
+                        shortestDistance = distance
+                        closestPlayer = player
+                    end
+                end
+            end
+            
+            if closestPlayer then
+                local args = {
+                    [1] = closestPlayer.Character,
+                    [2] = getSwordName()
+                }
+                ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
+            end
+            
+            wait(0.5)
+        end
+    end
+    
+    killAuraButton.MouseButton1Click:Connect(function()
+        killAuraEnabled = not killAuraEnabled
+        killAuraButton.BackgroundTransparency = killAuraEnabled and 0 or 1
+        if killAuraEnabled then
+            updateKillAura()
+        end
+    end)
+end
+
+local function onFlyToggle()
+    local flying = false
+    flyButton.BackgroundTransparency = 1
+    
+    flyButton.MouseButton1Click:Connect(function()
+        flying = not flying
+        flyButton.BackgroundTransparency = flying and 0 or 1
+        if flying then
+            game.Workspace.Gravity = 0
+        else
+            game.Workspace.Gravity = 196.2
+        end
+    end)
+end
+
+local function onNukerToggle()
+    local nukerEnabled = false
+    nukerButton.BackgroundTransparency = 1
+    
+    local function updateNuker()
+        while nukerEnabled do
+            local closestBed = findClosestBed()
+            if closestBed then
+                local args = {
+                    [1] = closestBed,
+                    [2] = getSwordName()
+                }
+                ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
+            end
+            wait(1)
+        end
+    end
+    
+    nukerButton.MouseButton1Click:Connect(function()
+        nukerEnabled = not nukerEnabled
+        nukerButton.BackgroundTransparency = nukerEnabled and 0 or 1
+        if nukerEnabled then
+            updateNuker()
+        end
+    end)
+end
+
+-- Call the functions to initialize
+onKillAuraToggle()
+onFlyToggle()
+onNukerToggle()
+
+-- Cleanup
 game.Players.LocalPlayer.Anticheat:Destroy()
 game.StarterPlayer.StarterPlayerScripts.Anticheat:Destroy()
