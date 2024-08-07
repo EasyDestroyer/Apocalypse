@@ -363,6 +363,7 @@ end)
   else
       if walkSpeedConnection then
       walkSpeedConnection:Disconnect()
+      Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
       end
 end
 end
