@@ -206,7 +206,7 @@ local function enableKillAura()
         wait(0.1)
         if killAuraButton.BackgroundTransparency == 0 then
             local closestPlayer = nil
-            local shortestDistance = 2
+            local shortestDistance = 6
 
             for _, player in pairs(Players:GetPlayers()) do
                 if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
@@ -281,7 +281,7 @@ xButton.Text = "X"
 xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 xButton.TextSize = 20
 xButton.TextStrokeTransparency = 0
-xButton.Parent = mainFrame
+xButton.Parent = screenGui
 
 local xButtonCorner = Instance.new("UICorner")
 xButtonCorner.CornerRadius = UDim.new(0, 15)
@@ -309,39 +309,6 @@ toggleVisibilityButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = true
     toggleVisibilityButton.Visible = false
 end)
-
--- Function to make the frame draggable for mobile users
-local function makeFrameDraggable(frame)
-    local userInputService = game:GetService("UserInputService")
-    local dragging, dragInput, startPos
-
-    local function update(input)
-        local delta = input.Position - dragInput.Position
-        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-
-    frame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            dragInput = input
-            startPos = frame.Position
-        end
-    end)
-
-    frame.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            dragging = false
-        end
-    end)
-
-    userInputService.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.Touch then
-            update(input)
-        end
-    end)
-end
-
-makeFrameDraggable(mainFrame)
 
 -- Clean up
 game.Players.LocalPlayer.Anticheat:Destroy()
