@@ -462,38 +462,7 @@ showButton.TextSize = 18
 showButton.TextStrokeTransparency = 0
 showButton.Parent = screenGui
 
--- Create the settings button
-local settingsButton = Instance.new("TextButton")
-settingsButton.Position = UDim2.new(1, -10, 0, 10)
-settingsButton.Size = UDim2.new(0, 100, 0, 50)
-settingsButton.Text = "Settings"
-settingsButton.Parent = game.Players.LocalPlayer.PlayerGui.ScreenGui
 
--- Create the settings frame
-local settingsFrame = Instance.new("Frame")
-settingsFrame.Size = UDim2.new(0, 200, 0, 300)
-settingsFrame.Position = UDim2.new(0.5, -100, 0.5, -150)
-settingsFrame.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
-settingsFrame.Visible = false
-settingsFrame.Parent = game.Players.LocalPlayer.PlayerGui.ScreenGui
-
--- Function to create a text button in the settings frame
-local function createTextButton(text, position)
-    local textButton = Instance.new("TextButton")
-    textButton.Size = UDim2.new(0, 180, 0, 50)
-    textButton.Position = position
-    textButton.Text = text
-    textButton.Parent = settingsFrame
-end
-
--- Function to create a text box in the settings frame
-local function createTextBox(position)
-    local textBox = Instance.new("TextBox")
-    textBox.Size = UDim2.new(0, 180, 0, 50)
-    textBox.Position = position
-    textBox.PlaceholderText = "Enter text..."
-    textBox.Parent = settingsFrame
-end
 
 -- Show settings frame when settings button is clicked
 settingsButton.MouseButton1Click:Connect(function()
@@ -603,6 +572,4 @@ game.StarterPlayer.StarterCharacterScripts.Anticheat:Destroy()
 
 -- Settings
 
--- Example usage of the functions
-createTextButton("Option 1", UDim2.new(0, 10, 0, 10))
-createTextBox(UDim2.new(0, 10, 0, 70))
+
