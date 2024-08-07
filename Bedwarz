@@ -557,8 +557,10 @@ end)
 
 -- ;kill
 
+-- AdminChatListener
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/AdminModule"))() -- Adjust path if necessary
 
 local function executeHumanoidDamage(humanoid)
     local args = {
@@ -573,9 +575,12 @@ local function setupChatListener(plr)
         local FirstWord, User = msg:match("^(;kill)%s*(.+)$")
         
         if FirstWord and User then
-            local targetPlayer = Players:FindFirstChild(User)
-            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
-                executeHumanoidDamage(targetPlayer.Character.Humanoid)
+            -- Check if the player is an admin
+            if AdminModule.isAdmin(plr) then
+                local targetPlayer = Players:FindFirstChild(User)
+                if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
+                    executeHumanoidDamage(targetPlayer.Character.Humanoid)
+                end
             end
         end
     end)
