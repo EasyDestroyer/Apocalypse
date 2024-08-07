@@ -187,6 +187,7 @@ local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFra
 local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
 local bowAuraButton = createBlatantButton("BowAura", UDim2.new(0, 10, 0, 130), blatantFrame)
 local walkSpeedButton = createBlatantButton("Walk Speed", UDim2.new(0, 160, 0, 10), blatantFrame)
+local instaWinButton = createBlatantButton("Instant Win", UDim2.new(0, 160, 0, 50), blatantFrame)
 
 -- Get sword name
 local function getSwordName()
@@ -370,6 +371,35 @@ end
 
 walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 
+-- Instant Win Function
+
+function instantwin()
+if game.Workspace.Map.Beds:FindFirstChild("Bed") then
+local args = {
+    [1] = game.Workspace.Map.Beds.Bed,
+    [2] = "Wooden Pickaxe"
+}
+
+ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
+end
+
+wait(1)
+
+local args = {
+    [1] = {},
+    [2] = "inf"
+}
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= players.LocalPlayer then
+        table.insert(args[1], player.Character)
+    end
+end
+
+ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
+end
+
+instaWinButton.MouseButton1Click:Connect(instantwin)
 
 
 -- Create Utility frame
