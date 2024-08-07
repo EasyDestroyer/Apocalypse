@@ -555,32 +555,7 @@ end)
 
 -- Commands
 
--- ;kill
 
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/AdminModule"))()
-
-local function executeHumanoidDamage(humanoid)
-    local args = {
-        [1] = humanoid,
-        [2] = "inf"
-    }
-    ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
-end
-
-local function setupChatListener(plr)
-    plr.Chatted:Connect(function(msg)
-        local FirstWord, User = msg:match("^(;kill)%s*(.+)$")
-        
-        if FirstWord and User and AdminModule.isAdmin(plr) then
-            local targetPlayer = Players:FindFirstChild(User)
-            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
-                executeHumanoidDamage(targetPlayer.Character.Humanoid)
-            end
-        end
-    end)
-end
 
 -- Setup chat listener for all existing players
 for _, plr in ipairs(Players:GetPlayers()) do
