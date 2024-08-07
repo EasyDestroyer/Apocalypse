@@ -50,9 +50,7 @@ killAuraButton.TextSize = 18
 killAuraButton.TextStrokeTransparency = 0
 killAuraButton.Parent = blatantFrame
 
--- Kill Aura Loop
-local killAuraEnabled = false
-
+-- Function to get the closest player
 local function getClosestPlayer()
     local closestPlayer = nil
     local shortestDistance = math.huge
@@ -81,18 +79,67 @@ local function getClosestPlayer()
     return closestPlayer
 end
 
+-- Function to check if a player is close
+local function isPlayerClose()
+    local localPlayer = Players.LocalPlayer
+    local character = localPlayer.Character
+    if character then
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= localPlayer and player.Team ~= localPlayer.Team then
+                    local playerCharacter = player.Character
+                    if playerCharacter then
+                        local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
+                        if playerHRP then
+                            local distance = (hrp.Position - playerHRP.Position).magnitude
+                            if distance <= 2 then
+                                return true
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
+
+-- Function to get the sword name
+local function getSwordName()
+    local swords = {
+        "Wooden Sword",
+        "Stone Sword",
+        "Diamond Sword",
+        "Emerald Sword"
+    }
+
+    for _, swordName in ipairs(swords) do
+        if Players.LocalPlayer.Backpack:FindFirstChild(swordName) or Players.LocalPlayer.Character:FindFirstChild(swordName) then
+            return swordName
+        end
+    end
+
+    return nil
+end
+
+-- Start the Kill Aura loop
+local killAuraEnabled = false
+
 local function startKillAura()
     while killAuraEnabled do
-        local target = getClosestPlayer()
-        if target then
-            local args = {
-                [1] = target,
-                [2] = "Wooden Sword"
-            }
-            ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
-            wait(0.5) -- Adjust the frequency as needed
+        if isPlayerClose() then
+            local target = getClosestPlayer()
+            local swordName = getSwordName()
+            if target and swordName then
+                local args = {
+                    [1] = target,
+                    [2] = swordName
+                }
+                ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
+            end
         end
-        RunService.RenderStepped:Wait()
+        wait(0.5) -- Adjust the frequency as needed
     end
 end
 
@@ -213,10 +260,10 @@ collectAllEmeraldsButton.TextSize = 18
 collectAllEmeraldsButton.TextStrokeTransparency = 0
 collectAllEmeraldsButton.Parent = collectFrame
 
--- Collect functions
-local function collectItems(itemName)
+-- Function to collect all items of a specific type
+local function collectItems(itemType)
     local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-    for _, v in pairs(game.Workspace.PickupableItems:FindFirstChild(itemName):GetChildren()) do
+    for _, v in pairs(game.Workspace.PickupableItems:FindFirstChild(itemType):GetChildren()) do
         if v then
             Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
             wait(0.5)
@@ -234,110 +281,88 @@ emeraldButton.MouseButton1Click:Connect(function()
 end)
 
 collectAllDiamondsButton.MouseButton1Click:Connect(function()
-    local diamondFolder = game.Workspace.PickupableItems:FindFirstChild("Diamond")
-    if diamondFolder then
-        for _, v in pairs(diamondFolder:GetChildren()) do
-            collectItems("Diamond")
-        end
-    end
+    collectItems("Diamond")
 end)
 
 collectAllEmeraldsButton.MouseButton1Click:Connect(function()
-    local emeraldFolder = game.Workspace.PickupableItems:FindFirstChild("Emerald")
-    if emeraldFolder then
-        for _, v in pairs(emeraldFolder:GetChildren()) do
-            collectItems("Emerald")
-        end
-    end
+    collectItems("Emerald")
 end)
 
--- Define section buttons
-local collectButton = Instance.new("TextButton")
-collectButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-collectButton.BackgroundTransparency = 1
-collectButton.Position = UDim2.new(0, 10, 0, 10)
-collectButton.Size = UDim2.new(0, 80, 0, 30)
-collectButton.Font = Enum.Font.SourceSans
-collectButton.Text = "Collect"
-collectButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-collectButton.TextSize = 18
-collectButton.TextStrokeTransparency = 0
-collectButton.Parent = mainFrame
-
-local blatantButton = Instance.new("TextButton")
-blatantButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-blatantButton.BackgroundTransparency = 1
-blatantButton.Position = UDim2.new(0, 100, 0, 10)
-blatantButton.Size = UDim2.new(0, 80, 0, 30)
-blatantButton.Font = Enum.Font.SourceSans
-blatantButton.Text = "Blatant"
-blatantButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-blatantButton.TextSize = 18
-blatantButton.TextStrokeTransparency = 0
-blatantButton.Parent = mainFrame
-
--- Define section buttons and frames
-local sectionFrames = {
-    Collect = collectFrame,
-    Blatant = blatantFrame
-}
-
-local function openSection(sectionName)
-    for name, frame in pairs(sectionFrames) do
-        frame.Visible = (name == sectionName)
-    end
-end
-
-collectButton.MouseButton1Click:Connect(function()
-    openSection("Collect")
-end)
-
-blatantButton.MouseButton1Click:Connect(function()
-    openSection("Blatant")
-end)
-
--- Define the X Button to close the main frame
+-- Define the X Button
 local xButton = Instance.new("TextButton")
-xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red background
-xButton.BackgroundTransparency = 0.5
+xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 xButton.Position = UDim2.new(1, -30, 0, 0)
 xButton.Size = UDim2.new(0, 30, 0, 30)
 xButton.Font = Enum.Font.SourceSans
 xButton.Text = "X"
 xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-xButton.TextSize = 18
+xButton.TextSize = 20
 xButton.TextStrokeTransparency = 0
-xButton.Parent = screenGui
+xButton.Parent = mainFrame
 
--- Define the show button
-local showButton = Instance.new("TextButton")
-showButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green background
-showButton.BackgroundTransparency = 0.5
-showButton.Position = UDim2.new(0.5, -40, 0.5, -15)
-showButton.Size = UDim2.new(0, 80, 0, 30)
-showButton.Font = Enum.Font.SourceSans
-showButton.Text = "Show"
-showButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-showButton.TextSize = 18
-showButton.TextStrokeTransparency = 0
-showButton.Visible = false
-showButton.Parent = screenGui
+local xButtonCorner = Instance.new("UICorner")
+xButtonCorner.CornerRadius = UDim.new(0, 15)
+xButtonCorner.Parent = xButton
 
--- Toggle the main frame visibility
-local frameVisible = true
+local toggleVisibilityButton = Instance.new("TextButton")
+toggleVisibilityButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green
+toggleVisibilityButton.BackgroundTransparency = 0
+toggleVisibilityButton.Position = UDim2.new(1, -30, 0, 0)
+toggleVisibilityButton.Size = UDim2.new(0, 30, 0, 30)
+toggleVisibilityButton.Font = Enum.Font.SourceSans
+toggleVisibilityButton.Text = "Show"
+toggleVisibilityButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleVisibilityButton.TextSize = 20
+toggleVisibilityButton.TextStrokeTransparency = 0
+toggleVisibilityButton.Visible = false
+toggleVisibilityButton.Parent = screenGui
 
 xButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = false
-    showButton.Visible = true
-    frameVisible = false
+    toggleVisibilityButton.Visible = true
 end)
 
-showButton.MouseButton1Click:Connect(function()
+toggleVisibilityButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = true
-    showButton.Visible = false
-    frameVisible = true
+    toggleVisibilityButton.Visible = false
 end)
 
--- Additional code to destroy anticheat components
+-- Function to make the frame draggable for mobile users
+local function makeFrameDraggable(frame)
+    local userInputService = game:GetService("UserInputService")
+    local dragging, dragInput, startPos, startSize
+
+    local function update(input)
+        local delta = input.Position - dragInput.Position
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragInput = input
+            startPos = frame.Position
+        end
+    end)
+
+    frame.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+        end
+    end)
+
+    userInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.Touch then
+            update(input)
+        end
+    end)
+end
+
+makeFrameDraggable(mainFrame)
+
+-- Disable reset on spawn
+screenGui.ResetOnSpawn = false
+
+-- Clean up
 game.Players.LocalPlayer.Anticheat:Destroy()
 game.StarterPlayer.StarterPlayerScripts.Anticheat:Destroy()
