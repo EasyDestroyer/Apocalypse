@@ -309,9 +309,9 @@ xButton.TextStrokeTransparency = 0
 xButton.Parent = screenGui
 
 local function closeMainFrame()
+    xButton.Visible = false
     mainFrame.Visible = false
     showButton.Visible = true
-    xButton.Visible = false
 end
 
 xButton.MouseButton1Click:Connect(closeMainFrame)
