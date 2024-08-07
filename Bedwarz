@@ -1,5 +1,7 @@
 setfpscap(244)
 
+
+
 -- Services
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -173,6 +175,10 @@ local function createBlatantButton(name, position, parent)
     button.TextSize = 18
     button.TextStrokeTransparency = 0
     button.Parent = parent
+
+    local uiCorner = Instance.new("UICorner")
+    uiCorner.CornerRadius = UDim.new(0, 10) -- Adjust the radius as needed
+    uiCorner.Parent = button
     return button
 end
 
