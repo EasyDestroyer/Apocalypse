@@ -557,18 +557,7 @@ end)
 
 
 
--- Setup chat listener for all existing players
-for _, plr in ipairs(Players:GetPlayers()) do
-    setupChatListener(plr)
-end
 
--- Setup chat listener for new players that join
-Players.PlayerAdded:Connect(setupChatListener)
-
--- Setup chat listener for all existing players
-for _, plr in ipairs(Players:GetPlayers()) do
-    setupChatListener(plr)
-end
 
 
 -- Cleanup
