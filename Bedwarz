@@ -299,19 +299,18 @@ end
 -- Create the X button
 local xButton = Instance.new("TextButton")
 xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-xButton.Position = UDim2.new(1, -50, 0, 10)
+xButton.Position = UDim2.new(1, -40, 0, 10)
 xButton.Size = UDim2.new(0, 40, 0, 40)
 xButton.Font = Enum.Font.SourceSans
 xButton.Text = "X"
 xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 xButton.TextSize = 18
 xButton.TextStrokeTransparency = 0
+xButton.Visible = true
 xButton.Parent = screenGui
 
 local function closeMainFrame()
-    xButton.Visible = false
     mainFrame.Visible = false
-    showButton.Visible = true
 end
 
 xButton.MouseButton1Click:Connect(closeMainFrame)
@@ -331,8 +330,6 @@ showButton.Parent = screenGui
 
 local function showMainFrame()
     mainFrame.Visible = true
-    showButton.Visible = false
-    xButton.Visible = true
 end
 
 showButton.MouseButton1Click:Connect(showMainFrame)
