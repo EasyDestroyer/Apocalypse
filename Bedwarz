@@ -232,7 +232,12 @@ end
 -- Toggle Kill Aura
 local killAuraEnabled = false
 local killAuraConnection
-local swordName
+local swordsFolder = game.ReplicatedStorage.Items.Swords
+local swordName = {}
+
+for _, sword in ipairs(swordsFolder:GetChildren()) do
+    table.insert(swordName, sword.Name)
+end
 
 local function toggleKillAura()
     killAuraEnabled = not killAuraEnabled
@@ -258,20 +263,6 @@ end
 
 function updateSwordName()
 getSwordName()
-end
-
-while wait(1) do
-if backpack:FindFirstChild("Wooden Sword") then
-swordName = "Wooden Sword"
-elseif backpack:FindFirstChild("Diamond Sword") then
-swordName = "Diamond Sword"
-elseif backpack:FindFirstChild("Stone Sword") then
-swordName = "Stone Sword"
-elseif backpack:FindFirstChild("Iron Sword") then
-swordName = "Iron Sword"
-elseif backpack:FindFirstChild("Emerald Sword") then
-swordName = "Emerald Sword"
-end
 end
 
 -- Toggle Fly
