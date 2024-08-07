@@ -41,7 +41,7 @@ tabCorner.CornerRadius = UDim.new(0, 15)
 tabCorner.Parent = tabContainer
 
 -- Create tab buttons
-local function createTabButton(name, position)
+local function createTabButton(name, position, parent)
     local button = Instance.new("TextButton")
     button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     button.BackgroundTransparency = 1
@@ -52,12 +52,12 @@ local function createTabButton(name, position)
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.TextSize = 18
     button.TextStrokeTransparency = 0
-    button.Parent = tabContainer
+    button.Parent = parent
     return button
 end
 
-local collectButton = createTabButton("Collect", UDim2.new(0, 0, 0, 0))
-local blatantButton = createTabButton("Blatant", UDim2.new(0, 100, 0, 0))
+local collectButton = createTabButton("Collect", UDim2.new(0, 0, 0, 0), tabContainer)
+local blatantButton = createTabButton("Blatant", UDim2.new(0, 100, 0, 0), tabContainer)
 
 -- Create the Collect frame
 local collectFrame = Instance.new("Frame")
@@ -156,7 +156,7 @@ blatantFrameCorner.CornerRadius = UDim.new(0, 15)
 blatantFrameCorner.Parent = blatantFrame
 
 -- Create buttons in Blatant frame
-local function createBlatantButton(name, position, parent, callback)
+local function createBlatantButton(name, position, parent)
     local button = Instance.new("TextButton")
     button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     button.BackgroundTransparency = 1
@@ -168,15 +168,17 @@ local function createBlatantButton(name, position, parent, callback)
     button.TextSize = 18
     button.TextStrokeTransparency = 0
     button.Parent = parent
-    button.MouseButton1Click:Connect(callback)
     return button
 end
 
--- Find the sword name from ReplicatedStorage
-local function getSwordName()
-    local itemsFolder = ReplicatedStorage:WaitForChild("Items")
-    local swords = {}
+local killAuraButton = createBlatantButton("Kill Aura", UDim2.new(0, 10, 0, 10), blatantFrame)
+local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFrame)
+local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
 
+-- Get sword name
+local function getSwordName()
+    local itemsFolder = ReplicatedStorage.Items
+    local swords = {}
     for _, v in pairs(itemsFolder:GetChildren()) do
         table.insert(swords, v.Name)
     end
@@ -186,26 +188,29 @@ local function getSwordName()
             return sword
         end
     end
-
     return "Wooden Sword"
 end
 
--- Find closest player
+-- Find closest player excluding team members
 local function findClosestPlayer(maxDistance)
     local closestPlayer = nil
     local shortestDistance = maxDistance
+    local localPlayerTeam = Players.LocalPlayer.Team
 
     for _, player in pairs(Players:GetPlayers()) do
         if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
-            if distance < shortestDistance and player.Team ~= Players.LocalPlayer.Team then
-                closestPlayer = player
-                shortestDistance = distance
+            local playerTeam = player.Team
+            if playerTeam ~= localPlayerTeam then
+                local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                if distance < shortestDistance then
+                    closestPlayer = player
+                    shortestDistance = distance
+                end
             end
         end
     end
 
-    return closestPlayer and closestPlayer.Character
+    return closestPlayer
 end
 
 -- Toggle Kill Aura
@@ -223,7 +228,7 @@ local function toggleKillAura()
                 local target = findClosestPlayer(18)
                 if target then
                     local swordName = getSwordName()
-                    local args = {target, swordName}
+                    local args = {target.Character, swordName}
                     ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
                 end
             end
@@ -294,8 +299,8 @@ end
 -- Create the X button
 local xButton = Instance.new("TextButton")
 xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-xButton.Position = UDim2.new(1, -30, 0, 10)
-xButton.Size = UDim2.new(0, 30, 0, 30)
+xButton.Position = UDim2.new(1, -50, 0, 10)
+xButton.Size = UDim2.new(0, 40, 0, 40)
 xButton.Font = Enum.Font.SourceSans
 xButton.Text = "X"
 xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -313,8 +318,8 @@ xButton.MouseButton1Click:Connect(closeMainFrame)
 -- Create the Show button
 local showButton = Instance.new("TextButton")
 showButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
-showButton.Position = UDim2.new(1, -30, 0, 10)
-showButton.Size = UDim2.new(0, 30, 0, 30)
+showButton.Position = UDim2.new(1, -50, 0, 10)
+showButton.Size = UDim2.new(0, 40, 0, 40)
 showButton.Font = Enum.Font.SourceSans
 showButton.Text = "Show"
 showButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -340,6 +345,11 @@ blatantButton.MouseButton1Click:Connect(function()
     collectFrame.Visible = false
     blatantFrame.Visible = true
 end)
+
+-- Bind toggle functions to buttons
+killAuraButton.MouseButton1Click:Connect(toggleKillAura)
+flyButton.MouseButton1Click:Connect(toggleFly)
+nukerButton.MouseButton1Click:Connect(toggleNuker)
 
 -- Cleanup
 Players.LocalPlayer.Anticheat:Destroy()
