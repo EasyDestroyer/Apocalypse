@@ -12,7 +12,7 @@ local mainFrame = Instance.new("Frame")
 mainFrame.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
 mainFrame.BackgroundTransparency = 0.5
 mainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
-mainFrame.Size = UDim2.new(0, 300, 0, 150)
+mainFrame.Size = UDim2.new(0, 300, 0, 200)
 mainFrame.Parent = screenGui
 
 local uiCorner = Instance.new("UICorner")
@@ -24,181 +24,37 @@ uiStroke.Color = Color3.fromRGB(255, 255, 255)
 uiStroke.Thickness = 2
 uiStroke.Parent = mainFrame
 
--- Define the Blatant Frame
-local blatantFrame = Instance.new("Frame")
-blatantFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-blatantFrame.BackgroundTransparency = 0.5
-blatantFrame.Position = UDim2.new(0, 0, 0, 40)
-blatantFrame.Size = UDim2.new(1, 0, 1, -40)
-blatantFrame.Visible = false
-blatantFrame.Parent = mainFrame
+-- Define tabs
+local tabContainer = Instance.new("Frame")
+tabContainer.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+tabContainer.BackgroundTransparency = 0.5
+tabContainer.Size = UDim2.new(1, 0, 0, 40)
+tabContainer.Parent = mainFrame
 
-local blatantFrameCorner = Instance.new("UICorner")
-blatantFrameCorner.CornerRadius = UDim.new(0, 15)
-blatantFrameCorner.Parent = blatantFrame
+local tabCorner = Instance.new("UICorner")
+tabCorner.CornerRadius = UDim.new(0, 15)
+tabCorner.Parent = tabContainer
 
--- Define the Kill Aura Button
-local killAuraButton = Instance.new("TextButton")
-killAuraButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Default color
-killAuraButton.BackgroundTransparency = 1 -- Fully transparent by default
-killAuraButton.Position = UDim2.new(0, 10, 0, 10)
-killAuraButton.Size = UDim2.new(0, 130, 0, 30)
-killAuraButton.Font = Enum.Font.SourceSans
-killAuraButton.Text = "Kill Aura"
-killAuraButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-killAuraButton.TextSize = 18
-killAuraButton.TextStrokeTransparency = 0
-killAuraButton.Parent = blatantFrame
-
--- Function to get the closest player
-local function getClosestPlayer()
-    local closestPlayer = nil
-    local shortestDistance = math.huge
-    local localPlayer = Players.LocalPlayer
-    local character = localPlayer.Character
-    if character then
-        local hrp = character:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= localPlayer and player.Team ~= localPlayer.Team then
-                    local playerCharacter = player.Character
-                    if playerCharacter then
-                        local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
-                        if playerHRP then
-                            local distance = (hrp.Position - playerHRP.Position).magnitude
-                            if distance < shortestDistance then
-                                closestPlayer = playerCharacter
-                                shortestDistance = distance
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return closestPlayer
+-- Define tab buttons
+local function createTabButton(name, position)
+    local button = Instance.new("TextButton")
+    button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    button.BackgroundTransparency = 1
+    button.Position = position
+    button.Size = UDim2.new(0, 100, 0, 40)
+    button.Font = Enum.Font.SourceSans
+    button.Text = name
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.TextSize = 18
+    button.TextStrokeTransparency = 0
+    button.Parent = tabContainer
+    return button
 end
 
--- Function to check if a player is close
-local function isPlayerClose()
-    local localPlayer = Players.LocalPlayer
-    local character = localPlayer.Character
-    if character then
-        local hrp = character:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= localPlayer and player.Team ~= localPlayer.Team then
-                    local playerCharacter = player.Character
-                    if playerCharacter then
-                        local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
-                        if playerHRP then
-                            local distance = (hrp.Position - playerHRP.Position).magnitude
-                            if distance <= 2 then
-                                return true
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return false
-end
+local collectButton = createTabButton("Collect", UDim2.new(0, 0, 0, 0))
+local blatantButton = createTabButton("Blatant", UDim2.new(0, 100, 0, 0))
 
--- Function to get the sword name
-local function getSwordName()
-    local swords = {
-        "Wooden Sword",
-        "Stone Sword",
-        "Diamond Sword",
-        "Emerald Sword"
-    }
-
-    for _, swordName in ipairs(swords) do
-        if Players.LocalPlayer.Backpack:FindFirstChild(swordName) or Players.LocalPlayer.Character:FindFirstChild(swordName) then
-            return swordName
-        end
-    end
-
-    return nil
-end
-
--- Start the Kill Aura loop
-local killAuraEnabled = false
-
-local function startKillAura()
-    while killAuraEnabled do
-        if isPlayerClose() then
-            local target = getClosestPlayer()
-            local swordName = getSwordName()
-            if target and swordName then
-                local args = {
-                    [1] = target,
-                    [2] = swordName
-                }
-                ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
-            end
-        end
-        wait(0.5) -- Adjust the frequency as needed
-    end
-end
-
-killAuraButton.MouseButton1Click:Connect(function()
-    killAuraEnabled = not killAuraEnabled
-    if killAuraEnabled then
-        -- Turn button background green and opaque when enabled
-        killAuraButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green
-        killAuraButton.BackgroundTransparency = 0
-        -- Start the kill aura loop
-        RunService.Heartbeat:Connect(startKillAura)
-    else
-        -- Turn button background black and fully transparent when disabled
-        killAuraButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black
-        killAuraButton.BackgroundTransparency = 1
-    end
-end)
-
--- Define the Fly Button
-local flyButton = Instance.new("TextButton")
-flyButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Default color
-flyButton.BackgroundTransparency = 1 -- Fully transparent by default
-flyButton.Position = UDim2.new(0, 10, 0, 50)
-flyButton.Size = UDim2.new(0, 130, 0, 30)
-flyButton.Font = Enum.Font.SourceSans
-flyButton.Text = "Fly"
-flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-flyButton.TextSize = 18
-flyButton.TextStrokeTransparency = 0
-flyButton.Parent = blatantFrame
-
--- Fly function
-local flyEnabled = false
-
-local function fly()
-    while flyEnabled do
-        game.Workspace.Gravity = 0
-        wait()
-    end
-    game.Workspace.Gravity = 196.2 -- Restore default gravity
-end
-
-flyButton.MouseButton1Click:Connect(function()
-    flyEnabled = not flyEnabled
-    if flyEnabled then
-        -- Turn button background green and opaque when enabled
-        flyButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green
-        flyButton.BackgroundTransparency = 0
-        -- Start the fly function
-        RunService.Heartbeat:Connect(fly)
-    else
-        -- Turn button background black and fully transparent when disabled
-        flyButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black
-        flyButton.BackgroundTransparency = 1
-        game.Workspace.Gravity = 196.2 -- Restore default gravity
-    end
-end)
-
--- Define the Collect frame
+-- Define frames
 local collectFrame = Instance.new("Frame")
 collectFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 collectFrame.BackgroundTransparency = 0.5
@@ -211,7 +67,19 @@ local collectFrameCorner = Instance.new("UICorner")
 collectFrameCorner.CornerRadius = UDim.new(0, 15)
 collectFrameCorner.Parent = collectFrame
 
--- Collect buttons
+local blatantFrame = Instance.new("Frame")
+blatantFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+blatantFrame.BackgroundTransparency = 0.5
+blatantFrame.Position = UDim2.new(0, 0, 0, 40)
+blatantFrame.Size = UDim2.new(1, 0, 1, -40)
+blatantFrame.Visible = false
+blatantFrame.Parent = mainFrame
+
+local blatantFrameCorner = Instance.new("UICorner")
+blatantFrameCorner.CornerRadius = UDim.new(0, 15)
+blatantFrameCorner.Parent = blatantFrame
+
+-- Define the Collect buttons
 local diamondButton = Instance.new("TextButton")
 diamondButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 diamondButton.BackgroundTransparency = 1
@@ -260,7 +128,33 @@ collectAllEmeraldsButton.TextSize = 18
 collectAllEmeraldsButton.TextStrokeTransparency = 0
 collectAllEmeraldsButton.Parent = collectFrame
 
--- Function to collect all items of a specific type
+-- Define the Kill Aura Button
+local killAuraButton = Instance.new("TextButton")
+killAuraButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+killAuraButton.BackgroundTransparency = 1
+killAuraButton.Position = UDim2.new(0, 10, 0, 10)
+killAuraButton.Size = UDim2.new(0, 130, 0, 30)
+killAuraButton.Font = Enum.Font.SourceSans
+killAuraButton.Text = "Kill Aura"
+killAuraButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+killAuraButton.TextSize = 18
+killAuraButton.TextStrokeTransparency = 0
+killAuraButton.Parent = blatantFrame
+
+-- Define the Fly Button
+local flyButton = Instance.new("TextButton")
+flyButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+flyButton.BackgroundTransparency = 1
+flyButton.Position = UDim2.new(0, 10, 0, 50)
+flyButton.Size = UDim2.new(0, 130, 0, 30)
+flyButton.Font = Enum.Font.SourceSans
+flyButton.Text = "Fly"
+flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+flyButton.TextSize = 18
+flyButton.TextStrokeTransparency = 0
+flyButton.Parent = blatantFrame
+
+-- Function to collect items
 local function collectItems(itemType)
     local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
     for _, v in pairs(game.Workspace.PickupableItems:FindFirstChild(itemType):GetChildren()) do
@@ -286,6 +180,95 @@ end)
 
 collectAllEmeraldsButton.MouseButton1Click:Connect(function()
     collectItems("Emerald")
+end)
+
+-- Function to get the sword name
+local function getSwordName()
+    local swords = {
+        "Wooden Sword",
+        "Stone Sword",
+        "Diamond Sword",
+        "Emerald Sword"
+    }
+
+    for _, swordName in ipairs(swords) do
+        if ReplicatedStorage:FindFirstChild(swordName) then
+            return swordName
+        end
+    end
+    return "Wooden Sword" -- Default sword
+end
+
+-- Kill Aura Function
+local function enableKillAura()
+    while true do
+        wait(0.1)
+        if not killAuraButton.BackgroundTransparency == 0 then
+            local closestPlayer = nil
+            local shortestDistance = 2
+
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                    if distance < shortestDistance then
+                        closestPlayer = player.Character
+                        shortestDistance = distance
+                    end
+                end
+            end
+
+            if closestPlayer then
+                local swordName = getSwordName()
+                local args = {
+                    [1] = closestPlayer,
+                    [2] = swordName
+                }
+                ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
+            end
+        end
+    end
+end
+
+killAuraButton.MouseButton1Click:Connect(function()
+    if killAuraButton.BackgroundTransparency == 0 then
+        killAuraButton.BackgroundTransparency = 1
+        -- Stop the Kill Aura loop
+        RunService:UnbindFromRenderStep("KillAura")
+    else
+        killAuraButton.BackgroundTransparency = 0
+        -- Start the Kill Aura loop
+        RunService:BindToRenderStep("KillAura", 0, enableKillAura)
+    end
+end)
+
+-- Fly Function
+local isFlying = false
+local flyButtonToggle = false
+
+flyButton.MouseButton1Click:Connect(function()
+    if not isFlying then
+        isFlying = true
+        game.Workspace.Gravity = 0
+        flyButton.BackgroundTransparency = 0.5
+    else
+        isFlying = false
+        game.Workspace.Gravity = 196.2
+        flyButton.BackgroundTransparency = 1
+    end
+end)
+
+-- Tab Switching
+local function switchTab(tabName)
+    collectFrame.Visible = (tabName == "Collect")
+    blatantFrame.Visible = (tabName == "Blatant")
+end
+
+collectButton.MouseButton1Click:Connect(function()
+    switchTab("Collect")
+end)
+
+blatantButton.MouseButton1Click:Connect(function()
+    switchTab("Blatant")
 end)
 
 -- Define the X Button
@@ -359,9 +342,6 @@ local function makeFrameDraggable(frame)
 end
 
 makeFrameDraggable(mainFrame)
-
--- Disable reset on spawn
-screenGui.ResetOnSpawn = false
 
 -- Clean up
 game.Players.LocalPlayer.Anticheat:Destroy()
