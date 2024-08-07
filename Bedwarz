@@ -262,13 +262,13 @@ end
 
 while wait(1) do
 if backpack:FindFirstChild("Diamond Sword") then
-swordName = getSwordName()
+swordName = "Diamond Sword"
 elseif backpack:FindFirstChild("Stone Sword") then
-swordName = getSwordName()
+swordName = "Stone Sword"
 elseif backpack:FindFirstChild("Iron Sword") then
-swordName = getSwordName()
+swordName = "Iron Sword"
 elseif backpack:FindFirstChild("Emerald Sword") then
-swordName = getSwordName()
+swordName = "Emerald Sword"
 end
 end
 
