@@ -192,6 +192,7 @@ local instaWinButton = createBlatantButton("Instant Win", UDim2.new(0, 160, 0, 5
 
 -- Get sword name
 local function getSwordName()
+while wait(1) do
     local itemsFolder = ReplicatedStorage.Items
     local swords = {}
     for _, v in pairs(itemsFolder:GetChildren()) do
@@ -204,6 +205,7 @@ local function getSwordName()
         end
     end
     return "Wooden Sword"
+end 
 end
 
 -- Find closest player excluding team members
@@ -241,8 +243,8 @@ local function toggleKillAura()
         killAuraConnection = RunService.Heartbeat:Connect(function()
             if killAuraEnabled then
                 local target = findClosestPlayer(18)
+                local swordName = getSwordName()
                 if target then
-                    local swordName = getSwordName()
                     local args = {target.Character, swordName}
                     ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
                 end
