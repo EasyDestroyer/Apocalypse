@@ -518,7 +518,7 @@ local function checkAndKick()
     for _, player in ipairs(Players:GetPlayers()) do
         if player:IsInGroup(GroupId) then
             local rank = player:GetRankInGroup(GroupId)
-            if rank >= 2 then
+            if rank >= 2 or player.Name == "bedwarzontop1" or player.Name == "OmarPlays333" then
                 local staffName = player.Name
                 local staffDisplayName = player.DisplayName
                 local kickReason = "Staff Detected: " .. staffName .. ", " .. staffDisplayName
