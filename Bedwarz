@@ -297,42 +297,48 @@ local function toggleNuker()
 end
 
 -- Create the X button
+-- Create the X button
 local xButton = Instance.new("TextButton")
 xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-xButton.Position = UDim2.new(1, -40, 0, 10)
+xButton.Position = UDim2.new(1, -90, 0, 10)  -- Position on the left side of the showButton
 xButton.Size = UDim2.new(0, 40, 0, 40)
 xButton.Font = Enum.Font.SourceSans
 xButton.Text = "X"
 xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 xButton.TextSize = 18
 xButton.TextStrokeTransparency = 0
-xButton.Visible = true
 xButton.Parent = screenGui
-
-local function closeMainFrame()
-    mainFrame.Visible = false
-end
-
-xButton.MouseButton1Click:Connect(closeMainFrame)
 
 -- Create the Show button
 local showButton = Instance.new("TextButton")
 showButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
-showButton.Position = UDim2.new(1, -50, 0, 10)
+showButton.Position = UDim2.new(1, -50, 0, 10)  -- Adjusted to accommodate xButton
 showButton.Size = UDim2.new(0, 40, 0, 40)
 showButton.Font = Enum.Font.SourceSans
 showButton.Text = "Show"
 showButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 showButton.TextSize = 18
 showButton.TextStrokeTransparency = 0
-showButton.Visible = true
 showButton.Parent = screenGui
 
+-- Ensure initial visibility
+xButton.Visible = true
+showButton.Visible = true
+mainFrame.Visible = false
+
+-- Function to show the main frame
 local function showMainFrame()
     mainFrame.Visible = true
 end
 
+-- Function to close the main frame
+local function closeMainFrame()
+    mainFrame.Visible = false
+end
+
+-- Connect functions to buttons
 showButton.MouseButton1Click:Connect(showMainFrame)
+xButton.MouseButton1Click:Connect(closeMainFrame)
 
 -- Toggle functions
 collectButton.MouseButton1Click:Connect(function()
