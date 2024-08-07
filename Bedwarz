@@ -42,11 +42,7 @@ local tabCorner = Instance.new("UICorner")
 tabCorner.CornerRadius = UDim.new(0, 15)
 tabCorner.Parent = tabContainer
 
-function addUICorner(button)
-    local uiCorner = Instance.new("UICorner")
-    uiCorner.CornerRadius = UDim.new(0, 10) -- Adjust the radius as needed
-    uiCorner.Parent = button
-end
+
 
 -- Create tab buttons
 local function createTabButton(name, position, parent)
@@ -369,11 +365,6 @@ walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 
 -- Add UI Corners
 
-addUICorner(killAuraButton)
-addUICorner(nukerButton)
-addUICorner(bowAuraButton)
-addUICorner(walkSpeedButton)
-addUICorner(flyButton)
 
 
 -- Create Utility frame
