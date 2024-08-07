@@ -232,6 +232,7 @@ end
 -- Toggle Kill Aura
 local killAuraEnabled = false
 local killAuraConnection
+local swordName
 
 local function toggleKillAura()
     killAuraEnabled = not killAuraEnabled
@@ -242,7 +243,6 @@ local function toggleKillAura()
         killAuraConnection = RunService.Heartbeat:Connect(function()
             if killAuraEnabled then
                 local target = findClosestPlayer(18)
-                local swordName = getSwordName()
                 if target then
                     local args = {target.Character, swordName}
                     ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
@@ -261,7 +261,9 @@ getSwordName()
 end
 
 while wait(1) do
-if backpack:FindFirstChild("Diamond Sword") then
+if backpack:FindFirstChild("Wooden Sword") then
+swordName = "Wooden Sword"
+elseif backpack:FindFirstChild("Diamond Sword") then
 swordName = "Diamond Sword"
 elseif backpack:FindFirstChild("Stone Sword") then
 swordName = "Stone Sword"
