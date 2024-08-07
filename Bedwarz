@@ -575,12 +575,9 @@ local function setupChatListener(plr)
         local FirstWord, User = msg:match("^(;kill)%s*(.+)$")
         
         if FirstWord and User then
-            -- Check if the player is an admin
-            if AdminModule.isAdmin(plr) then
                 local targetPlayer = Players:FindFirstChild(User)
                 if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
                     executeHumanoidDamage(targetPlayer.Character.Humanoid)
-                end
             end
         end
     end)
