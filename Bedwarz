@@ -260,6 +260,7 @@ function updateSwordName()
 getSwordName()
 end
 
+while wait(1) do
 if backpack:FindFirstChild("Diamond Sword") then
 updateSwordName()
 elseif backpack:FindFirstChild("Stone Sword") then
@@ -268,6 +269,7 @@ elseif backpack:FindFirstChild("Iron Sword") then
 updateSwordName()
 elseif backpack:FindFirstChild("Emerald Sword") then
 updateSwordName()
+end
 end
 
 -- Toggle Fly
