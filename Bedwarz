@@ -6,6 +6,7 @@ local RunService = game:GetService("RunService")
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "SampleGui"
 screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+screenGui.ResetOnSpawn = false -- Disable ResetOnSpawn
 
 local mainFrame = Instance.new("Frame")
 mainFrame.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
@@ -109,27 +110,47 @@ killAuraButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Reuse previous section button functionality
-local sectionNames = {"Collect", "Utility", "Blatant"}
-local sectionButtons = {}
-local buttonWidth = 100
+-- Define the Fly Button
+local flyButton = Instance.new("TextButton")
+flyButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Default color
+flyButton.BackgroundTransparency = 1 -- Fully transparent by default
+flyButton.Position = UDim2.new(0, 10, 0, 50)
+flyButton.Size = UDim2.new(0, 130, 0, 30)
+flyButton.Font = Enum.Font.SourceSans
+flyButton.Text = "Fly"
+flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+flyButton.TextSize = 18
+flyButton.TextStrokeTransparency = 0
+flyButton.Parent = blatantFrame
 
-for i, name in ipairs(sectionNames) do
-    local button = Instance.new("TextButton")
-    button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    button.BackgroundTransparency = 1
-    button.Position = UDim2.new(0, (i-1) * buttonWidth, 0, 0)
-    button.Size = UDim2.new(0, buttonWidth, 0, 40)
-    button.Font = Enum.Font.SourceSans
-    button.Text = name
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.TextSize = 18
-    button.TextStrokeTransparency = 0
-    button.Parent = mainFrame
-    table.insert(sectionButtons, button)
+-- Fly function
+local flyEnabled = false
+
+local function fly()
+    while flyEnabled do
+        game.Workspace.Gravity = 0
+        wait()
+    end
+    game.Workspace.Gravity = 196.2 -- Restore default gravity
 end
 
--- Collect frame
+flyButton.MouseButton1Click:Connect(function()
+    flyEnabled = not flyEnabled
+    if flyEnabled then
+        -- Turn button background green and opaque when enabled
+        flyButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green
+        flyButton.BackgroundTransparency = 0
+        -- Start the fly function
+        RunService.Heartbeat:Connect(fly)
+    else
+        -- Turn button background black and fully transparent when disabled
+        flyButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black
+        flyButton.BackgroundTransparency = 1
+        game.Workspace.Gravity = 196.2 -- Restore default gravity
+    end
+end)
+
+-- Define the Collect frame
 local collectFrame = Instance.new("Frame")
 collectFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 collectFrame.BackgroundTransparency = 0.5
@@ -192,135 +213,167 @@ collectAllEmeraldsButton.TextStrokeTransparency = 0
 collectAllEmeraldsButton.Parent = collectFrame
 
 -- Collect functions
-diamondButton.MouseButton1Click:Connect(function()
+local function collectItems(itemName)
     local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-    for _, v in pairs(game.Workspace.PickupableItems:FindFirstChild("Diamond"):GetChildren()) do
+    for _, v in pairs(game.Workspace.PickupableItems:FindFirstChild(itemName):GetChildren()) do
         if v then
             Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
             wait(0.5)
             Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
         end
     end
+end
+
+diamondButton.MouseButton1Click:Connect(function()
+    collectItems("Diamond")
 end)
 
 emeraldButton.MouseButton1Click:Connect(function()
-    local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-    for _, v in pairs(game.Workspace.PickupableItems:FindFirstChild("Emerald"):GetChildren()) do
-        if v then
-            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-            wait(0.5)
-            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
-        end
-    end
+    collectItems("Emerald")
 end)
 
 collectAllDiamondsButton.MouseButton1Click:Connect(function()
-    local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-    for _, v in pairs(game.Workspace.PickupableItems:FindFirstChild("Diamond"):GetChildren()) do
-        if v then
-            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-            wait(0.5)
-            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
+    local diamondFolder = game.Workspace.PickupableItems:FindFirstChild("Diamond")
+    if diamondFolder then
+        for _, v in pairs(diamondFolder:GetChildren()) do
+            collectItems("Diamond")
         end
     end
 end)
 
 collectAllEmeraldsButton.MouseButton1Click:Connect(function()
-    local currentCFrame = Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-    for _, v in pairs(game.Workspace.PickupableItems:FindFirstChild("Emerald"):GetChildren()) do
-        if v then
-            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-            wait(0.5)
-            Players.LocalPlayer.Character.HumanoidRootPart.CFrame = currentCFrame
+    local emeraldFolder = game.Workspace.PickupableItems:FindFirstChild("Emerald")
+    if emeraldFolder then
+        for _, v in pairs(emeraldFolder:GetChildren()) do
+            collectItems("Emerald")
         end
     end
 end)
 
--- Blatant section button functionality
-sectionButtons[1].MouseButton1Click:Connect(function()
-    collectFrame.Visible = true
-    blatantFrame.Visible = false
+-- Define the Collect and Blatant buttons
+local collectButton = Instance.new("TextButton")
+collectButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+collectButton.BackgroundTransparency = 1
+collectButton.Position = UDim2.new(0, 10, 0, 10)
+collectButton.Size = UDim2.new(0, 80, 0, 30)
+collectButton.Font = Enum.Font.SourceSans
+collectButton.Text = "Collect"
+collectButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+collectButton.TextSize = 18
+collectButton.TextStrokeTransparency = 0
+collectButton.Parent = mainFrame
+
+local blatantButton = Instance.new("TextButton")
+blatantButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+blatantButton.BackgroundTransparency = 1
+blatantButton.Position = UDim2.new(0, 100, 0, 10)
+blatantButton.Size = UDim2.new(0, 80, 0, 30)
+blatantButton.Font = Enum.Font.SourceSans
+blatantButton.Text = "Blatant"
+blatantButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+blatantButton.TextSize = 18
+blatantButton.TextStrokeTransparency = 0
+blatantButton.Parent = mainFrame
+
+-- Define section buttons and frames
+local sectionFrames = {
+    Collect = collectFrame,
+    Blatant = blatantFrame
+}
+
+local function openSection(sectionName)
+    for name, frame in pairs(sectionFrames) do
+        frame.Visible = (name == sectionName)
+    end
+end
+
+collectButton.MouseButton1Click:Connect(function()
+    openSection("Collect")
 end)
 
-sectionButtons[2].MouseButton1Click:Connect(function()
-    collectFrame.Visible = false
-    blatantFrame.Visible = false
+blatantButton.MouseButton1Click:Connect(function()
+    openSection("Blatant")
 end)
 
-sectionButtons[3].MouseButton1Click:Connect(function()
-    collectFrame.Visible = false
-    blatantFrame.Visible = true
-end)
-
--- X button to close the main frame
+-- Define the X Button to close the main frame
 local xButton = Instance.new("TextButton")
-xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red color
-xButton.BackgroundTransparency = 0
-xButton.Position = UDim2.new(1, -30, 0, 5)
-xButton.Size = UDim2.new(0, 25, 0, 25)
+xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red background
+xButton.BackgroundTransparency = 0.5
+xButton.Position = UDim2.new(1, -30, 0, 0)
+xButton.Size = UDim2.new(0, 30, 0, 30)
 xButton.Font = Enum.Font.SourceSans
 xButton.Text = "X"
 xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 xButton.TextSize = 18
 xButton.TextStrokeTransparency = 0
-xButton.Parent = screenGui
+xButton.Parent = mainFrame
+
+-- Define the show button
+local showButton = Instance.new("TextButton")
+showButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green background
+showButton.BackgroundTransparency = 0.5
+showButton.Position = UDim2.new(0.5, -40, 0.5, -15)
+showButton.Size = UDim2.new(0, 80, 0, 30)
+showButton.Font = Enum.Font.SourceSans
+showButton.Text = "Show"
+showButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+showButton.TextSize = 18
+showButton.TextStrokeTransparency = 0
+showButton.Visible = false
+showButton.Parent = screenGui
+
+-- Toggle the main frame visibility
+local frameVisible = true
 
 xButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = false
-    xButton.Visible = false
+    showButton.Visible = true
+    frameVisible = false
 end)
 
--- Button to reopen the main frame
-local reopenButton = Instance.new("TextButton")
-reopenButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green color
-reopenButton.BackgroundTransparency = 0
-reopenButton.Position = UDim2.new(1, -30, 0, 5)
-reopenButton.Size = UDim2.new(0, 25, 0, 25)
-reopenButton.Font = Enum.Font.SourceSans
-reopenButton.Text = "+"
-reopenButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-reopenButton.TextSize = 18
-reopenButton.TextStrokeTransparency = 0
-reopenButton.Visible = false
-reopenButton.Parent = screenGui
-
-reopenButton.MouseButton1Click:Connect(function()
+showButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = true
-    xButton.Visible = true
-    reopenButton.Visible = false
+    showButton.Visible = false
+    frameVisible = true
 end)
 
--- Update the visibility of the reopen button
-mainFrame:GetPropertyChangedSignal("Visible"):Connect(function()
-    reopenButton.Visible = not mainFrame.Visible
-end)
+-- Define the Collect Button function for opening the Collect section
+local function createCollectButton()
+    local collectButton = Instance.new("TextButton")
+    collectButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    collectButton.BackgroundTransparency = 1
+    collectButton.Position = UDim2.new(0, 10, 0, 10)
+    collectButton.Size = UDim2.new(0, 80, 0, 30)
+    collectButton.Font = Enum.Font.SourceSans
+    collectButton.Text = "Collect"
+    collectButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    collectButton.TextSize = 18
+    collectButton.TextStrokeTransparency = 0
+    collectButton.Parent = mainFrame
 
--- Make the main frame draggable
-local dragging, dragInput, startPos, startSize
-
-local function update(input)
-    local delta = input.Position - dragInput.Position
-    mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    return collectButton
 end
 
-mainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragInput = input
-        startPos = mainFrame.Position
-        startSize = mainFrame.Size
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
+-- Define the Collect frame function
+local function createCollectFrame()
+    local collectFrame = Instance.new("Frame")
+    collectFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    collectFrame.BackgroundTransparency = 0.5
+    collectFrame.Position = UDim2.new(0, 0, 0, 40)
+    collectFrame.Size = UDim2.new(1, 0, 1, -40)
+    collectFrame.Visible = false
+    collectFrame.Parent = mainFrame
 
-mainFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement then
-        if dragging then
-            update(input)
-        end
-    end
-end)
+    local collectFrameCorner = Instance.new("UICorner")
+    collectFrameCorner.CornerRadius = UDim.new(0, 15)
+    collectFrameCorner.Parent = collectFrame
+
+    -- Add Collect buttons
+    createCollectButton().Parent = collectFrame
+end
+
+createCollectFrame()
+
+-- Additional code to destroy anticheat components
+game.Players.LocalPlayer.Anticheat:Destroy()
+game.StarterPlayer.StarterPlayerScripts.Anticheat:Destroy()
