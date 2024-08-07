@@ -374,43 +374,7 @@ walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 
 -- Instant Win Function
 
-function instantwin()
-local Workspace = game:GetService("Workspace")
 
-local numRepeats = 15 -- Number of times to fire DamageHumanoid for each player
-
--- Loop to fire DamageBlock until there are no beds left
-while Workspace.Map:FindFirstChild("Beds") and #Workspace.Map.Beds:GetChildren() > 0 do
-    for _, bed in ipairs(Workspace.Map.Beds:GetChildren()) do
-        if bed then
-            local args = {
-                [1] = bed,
-                [2] = "Wooden Pickaxe"
-            }
-            ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
-        end
-    end
-    wait(1) -- Optional: Add a short delay between each full pass
-end
-
--- Fire DamageHumanoid for all players except yourself after beds are gone
-for _, player in ipairs(Players:GetPlayers()) do
-    if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") then
-        for i = 1, numRepeats do
-            local args = {
-                [1] = player.Character.Humanoid,
-                [2] = "inf"
-            }
-            ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
-        end
-    end
-end
-end
-
-ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
-end
-
-instaWinButton.MouseButton1Click:Connect(instantwin)
 
 
 -- Create Utility frame
