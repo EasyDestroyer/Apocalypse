@@ -183,7 +183,7 @@ collectAllEmeraldsButton.MouseButton1Click:Connect(function()
     collectItems("Emerald")
 end)
 
--- Function to get the sword name
+-- Function to get the sword name from the player's backpack
 local function getSwordName()
     local swords = {
         "Wooden Sword",
@@ -193,7 +193,7 @@ local function getSwordName()
     }
 
     for _, swordName in ipairs(swords) do
-        if ReplicatedStorage:FindFirstChild(swordName) then
+        if Players.LocalPlayer.Backpack:FindFirstChild(swordName) then
             return swordName
         end
     end
@@ -206,7 +206,7 @@ local function enableKillAura()
         wait(0.1)
         if killAuraButton.BackgroundTransparency == 0 then
             local closestPlayer = nil
-            local shortestDistance = 6
+            local shortestDistance = 12 -- Updated distance
 
             for _, player in pairs(Players:GetPlayers()) do
                 if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
