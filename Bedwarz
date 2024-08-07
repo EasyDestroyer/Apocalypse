@@ -1,137 +1,97 @@
+-- Services
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
-local player = Players.LocalPlayer
 
--- Create screen GUI
+-- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "SampleGui"
+screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 screenGui.ResetOnSpawn = false
-screenGui.Parent = game.CoreGui
 
--- Create main frame
+-- Create the main frame
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 400, 0, 300)
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
-mainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+mainFrame.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
 mainFrame.BackgroundTransparency = 0.5
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
+mainFrame.Size = UDim2.new(0, 300, 0, 200)
+mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
 local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 15)
 uiCorner.Parent = mainFrame
 
 local uiStroke = Instance.new("UIStroke")
 uiStroke.Color = Color3.fromRGB(255, 255, 255)
+uiStroke.Thickness = 2
 uiStroke.Parent = mainFrame
 
--- Create Collect frame
-local collectFrame = Instance.new("Frame")
-collectFrame.Size = UDim2.new(1, 0, 1, -50)
-collectFrame.Position = UDim2.new(0, 0, 0, 50)
-collectFrame.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-collectFrame.BackgroundTransparency = 0.5
-collectFrame.Visible = false
-collectFrame.Parent = mainFrame
+-- Create the tab container
+local tabContainer = Instance.new("Frame")
+tabContainer.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+tabContainer.BackgroundTransparency = 0.5
+tabContainer.Size = UDim2.new(1, 0, 0, 40)
+tabContainer.Position = UDim2.new(0, 0, 0, 0)
+tabContainer.Parent = mainFrame
 
-local uiCorner2 = Instance.new("UICorner")
-uiCorner2.Parent = collectFrame
-
--- Create Blatant frame
-local blatantFrame = Instance.new("Frame")
-blatantFrame.Size = UDim2.new(1, 0, 1, -50)
-blatantFrame.Position = UDim2.new(0, 0, 0, 50)
-blatantFrame.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-blatantFrame.BackgroundTransparency = 0.5
-blatantFrame.Visible = false
-blatantFrame.Parent = mainFrame
-
-local uiCorner3 = Instance.new("UICorner")
-uiCorner3.Parent = blatantFrame
+local tabCorner = Instance.new("UICorner")
+tabCorner.CornerRadius = UDim.new(0, 15)
+tabCorner.Parent = tabContainer
 
 -- Create tab buttons
-local collectButton = Instance.new("TextButton")
-collectButton.Size = UDim2.new(0, 100, 0, 50)
-collectButton.Position = UDim2.new(0, 0, 0, 0)
-collectButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-collectButton.Text = "Collect"
-collectButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-collectButton.Parent = mainFrame
-
-local blatantButton = Instance.new("TextButton")
-blatantButton.Size = UDim2.new(0, 100, 0, 50)
-blatantButton.Position = UDim2.new(0, 100, 0, 0)
-blatantButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-blatantButton.Text = "Blatant"
-blatantButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-blatantButton.Parent = mainFrame
-
--- Create Collect buttons
-local collectDiamondButton = Instance.new("TextButton")
-collectDiamondButton.Size = UDim2.new(0, 100, 0, 50)
-collectDiamondButton.Position = UDim2.new(0, 10, 0, 10)
-collectDiamondButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-collectDiamondButton.BackgroundTransparency = 1
-collectDiamondButton.Text = "Collect Diamond"
-collectDiamondButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-collectDiamondButton.Parent = collectFrame
-
-local collectEmeraldButton = Instance.new("TextButton")
-collectEmeraldButton.Size = UDim2.new(0, 100, 0, 50)
-collectEmeraldButton.Position = UDim2.new(0, 10, 0, 70)
-collectEmeraldButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-collectEmeraldButton.BackgroundTransparency = 1
-collectEmeraldButton.Text = "Collect Emerald"
-collectEmeraldButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-collectEmeraldButton.Parent = collectFrame
-
-local collectIronButton = Instance.new("TextButton")
-collectIronButton.Size = UDim2.new(0, 100, 0, 50)
-collectIronButton.Position = UDim2.new(0, 10, 0, 130)
-collectIronButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-collectIronButton.BackgroundTransparency = 1
-collectIronButton.Text = "Collect Iron"
-collectIronButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-collectIronButton.Parent = collectFrame
-
-local collectAllDiamondsButton = Instance.new("TextButton")
-collectAllDiamondsButton.Size = UDim2.new(0, 100, 0, 50)
-collectAllDiamondsButton.Position = UDim2.new(0, 10, 0, 190)
-collectAllDiamondsButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-collectAllDiamondsButton.BackgroundTransparency = 1
-collectAllDiamondsButton.Text = "Collect All Diamonds"
-collectAllDiamondsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-collectAllDiamondsButton.Parent = collectFrame
-
-local collectAllEmeraldsButton = Instance.new("TextButton")
-collectAllEmeraldsButton.Size = UDim2.new(0, 100, 0, 50)
-collectAllEmeraldsButton.Position = UDim2.new(0, 10, 0, 250)
-collectAllEmeraldsButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-collectAllEmeraldsButton.BackgroundTransparency = 1
-collectAllEmeraldsButton.Text = "Collect All Emeralds"
-collectAllEmeraldsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-collectAllEmeraldsButton.Parent = collectFrame
-
--- Create blatant buttons
-local function createBlatantButton(name, position, parent)
+local function createTabButton(name, position, parent)
     local button = Instance.new("TextButton")
-    button.Size = UDim2.new(0, 100, 0, 30)
-    button.Position = position
     button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     button.BackgroundTransparency = 1
+    button.Position = position
+    button.Size = UDim2.new(0, 100, 0, 40)
+    button.Font = Enum.Font.SourceSans
     button.Text = name
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.TextSize = 18
+    button.TextStrokeTransparency = 0
     button.Parent = parent
     return button
 end
 
-local killAuraButton = createBlatantButton("Kill Aura", UDim2.new(0, 10, 0, 10), blatantFrame)
-local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFrame)
-local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
+local collectButton = createTabButton("Collect", UDim2.new(0, 0, 0, 0), tabContainer)
+local blatantButton = createTabButton("Blatant", UDim2.new(0, 100, 0, 0), tabContainer)
 
--- Functions
+-- Create the Collect frame
+local collectFrame = Instance.new("Frame")
+collectFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+collectFrame.BackgroundTransparency = 0.5
+collectFrame.Position = UDim2.new(0, 0, 0, 40)
+collectFrame.Size = UDim2.new(1, 0, 1, -40)
+collectFrame.Visible = false
+collectFrame.Parent = mainFrame
+
+local collectFrameCorner = Instance.new("UICorner")
+collectFrameCorner.CornerRadius = UDim.new(0, 15)
+collectFrameCorner.Parent = collectFrame
+
+-- Create buttons in Collect frame
+local function createCollectButton(name, position, parent, callback)
+    local button = Instance.new("TextButton")
+    button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    button.BackgroundTransparency = 1
+    button.Position = position
+    button.Size = UDim2.new(0, 130, 0, 30)
+    button.Font = Enum.Font.SourceSans
+    button.Text = name
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.TextSize = 18
+    button.TextStrokeTransparency = 0
+    button.Parent = parent
+    button.MouseButton1Click:Connect(callback)
+    return button
+end
+
 local function collectDiamonds()
+    local player = Players.LocalPlayer
     local currentCFrame = player.Character.HumanoidRootPart.CFrame
-
     for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Diamond"):GetChildren()) do
         if v then
             player.Character.HumanoidRootPart.CFrame = v.CFrame
@@ -142,8 +102,8 @@ local function collectDiamonds()
 end
 
 local function collectEmeralds()
+    local player = Players.LocalPlayer
     local currentCFrame = player.Character.HumanoidRootPart.CFrame
-
     for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Emerald"):GetChildren()) do
         if v then
             player.Character.HumanoidRootPart.CFrame = v.CFrame
@@ -153,73 +113,97 @@ local function collectEmeralds()
     end
 end
 
-local function collectIrons()
-    local currentCFrame = player.Character.HumanoidRootPart.CFrame
-
-    for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Iron"):GetChildren()) do
-        if v then
-            v.CFrame = player.Character.HumanoidRootPart.CFrame
-            wait(0.5)
-        end
-    end
-end
-
 local function collectAllDiamonds()
+    local player = Players.LocalPlayer
     local currentCFrame = player.Character.HumanoidRootPart.CFrame
-
     for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Diamond"):GetChildren()) do
         if v then
             player.Character.HumanoidRootPart.CFrame = v.CFrame
             wait(0.5)
+            player.Character.HumanoidRootPart.CFrame = currentCFrame
         end
     end
-
-    player.Character.HumanoidRootPart.CFrame = currentCFrame
 end
 
 local function collectAllEmeralds()
+    local player = Players.LocalPlayer
     local currentCFrame = player.Character.HumanoidRootPart.CFrame
-
     for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Emerald"):GetChildren()) do
         if v then
             player.Character.HumanoidRootPart.CFrame = v.CFrame
             wait(0.5)
+            player.Character.HumanoidRootPart.CFrame = currentCFrame
         end
     end
-
-    player.Character.HumanoidRootPart.CFrame = currentCFrame
 end
 
--- Sword selection function
+local diamondButton = createCollectButton("Collect Diamonds", UDim2.new(0, 10, 0, 10), collectFrame, collectDiamonds)
+local emeraldButton = createCollectButton("Collect Emeralds", UDim2.new(0, 160, 0, 10), collectFrame, collectEmeralds)
+local collectAllDiamondsButton = createCollectButton("Collect All Diamonds", UDim2.new(0, 10, 0, 50), collectFrame, collectAllDiamonds)
+local collectAllEmeraldsButton = createCollectButton("Collect All Emeralds", UDim2.new(0, 160, 0, 50), collectFrame, collectAllEmeralds)
+
+-- Create the Blatant frame
+local blatantFrame = Instance.new("Frame")
+blatantFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+blatantFrame.BackgroundTransparency = 0.5
+blatantFrame.Position = UDim2.new(0, 0, 0, 40)
+blatantFrame.Size = UDim2.new(1, 0, 1, -40)
+blatantFrame.Visible = false
+blatantFrame.Parent = mainFrame
+
+local blatantFrameCorner = Instance.new("UICorner")
+blatantFrameCorner.CornerRadius = UDim.new(0, 15)
+blatantFrameCorner.Parent = blatantFrame
+
+-- Create buttons in Blatant frame
+local function createBlatantButton(name, position, parent)
+    local button = Instance.new("TextButton")
+    button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    button.BackgroundTransparency = 1
+    button.Position = position
+    button.Size = UDim2.new(0, 130, 0, 30)
+    button.Font = Enum.Font.SourceSans
+    button.Text = name
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.TextSize = 18
+    button.TextStrokeTransparency = 0
+    button.Parent = parent
+    return button
+end
+
+local killAuraButton = createBlatantButton("Kill Aura", UDim2.new(0, 10, 0, 10), blatantFrame)
+local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFrame)
+local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
+
+-- Get sword name
 local function getSwordName()
-    local itemsFolder = ReplicatedStorage:WaitForChild("Items")
-    local playerBackpack = player:WaitForChild("Backpack")
-
-    if playerBackpack:FindFirstChild("Wooden Sword") then
-        return "Wooden Sword"
-    elseif playerBackpack:FindFirstChild("Stone Sword") then
-        return "Stone Sword"
-    elseif playerBackpack:FindFirstChild("Diamond Sword") then
-        return "Diamond Sword"
-    elseif playerBackpack:FindFirstChild("Emerald Sword") then
-        return "Emerald Sword"
-    else
-        return "Wooden Sword"
+    local itemsFolder = ReplicatedStorage.Items
+    local swords = {}
+    for _, v in pairs(itemsFolder:GetChildren()) do
+        table.insert(swords, v.Name)
     end
+
+    for _, sword in pairs(swords) do
+        if Players.LocalPlayer.Backpack:FindFirstChild(sword) then
+            return sword
+        end
+    end
+    return "Wooden Sword"
 end
 
--- Find closest player
+-- Find closest player excluding team members
 local function findClosestPlayer(maxDistance)
     local closestPlayer = nil
     local shortestDistance = maxDistance
-    local playerTeamColor = player.TeamColor.Color
+    local localPlayerTeam = Players.LocalPlayer.Team
 
-    for _, otherPlayer in pairs(Players:GetPlayers()) do
-        if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            if otherPlayer.TeamColor.Color ~= playerTeamColor then
-                local distance = (otherPlayer.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local playerTeam = player.Team
+            if playerTeam ~= localPlayerTeam then
+                local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
                 if distance < shortestDistance then
-                    closestPlayer = otherPlayer
+                    closestPlayer = player
                     shortestDistance = distance
                 end
             end
@@ -229,84 +213,131 @@ local function findClosestPlayer(maxDistance)
     return closestPlayer
 end
 
--- Kill aura function
+-- Toggle Kill Aura
 local killAuraEnabled = false
+local killAuraConnection
 
 local function toggleKillAura()
     killAuraEnabled = not killAuraEnabled
+    killAuraButton.BackgroundColor3 = killAuraEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+    killAuraButton.BackgroundTransparency = killAuraEnabled and 0 or 1
+
     if killAuraEnabled then
-        killAuraButton.BackgroundTransparency = 0
-        killAuraButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-        while killAuraEnabled do
-            local closestPlayer = findClosestPlayer(18)
-            if closestPlayer then
-                local args = {
-                    [1] = closestPlayer.Character,
-                    [2] = getSwordName()
-                }
-                ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
+        killAuraConnection = RunService.Heartbeat:Connect(function()
+            if killAuraEnabled then
+                local target = findClosestPlayer(18)
+                if target then
+                    local swordName = getSwordName()
+                    local args = {target.Character, swordName}
+                    ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
+                end
             end
-            wait(0.1)
-        end
+        end)
     else
-        killAuraButton.BackgroundTransparency = 1
+        if killAuraConnection then
+            killAuraConnection:Disconnect()
+        end
     end
 end
 
-killAuraButton.MouseButton1Click:Connect(toggleKillAura)
-
--- Fly function
+-- Toggle Fly
 local flyEnabled = false
 
 local function toggleFly()
     flyEnabled = not flyEnabled
+    flyButton.BackgroundColor3 = flyEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+    flyButton.BackgroundTransparency = flyEnabled and 0 or 1
+
     if flyEnabled then
-        flyButton.BackgroundTransparency = 0
-        flyButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
         Workspace.Gravity = 0
     else
-        flyButton.BackgroundTransparency = 1
         Workspace.Gravity = 196.2
     end
 end
 
-flyButton.MouseButton1Click:Connect(toggleFly)
-
--- Nuker function
+-- Toggle Nuker
 local nukerEnabled = false
+local nukerConnection
 
 local function toggleNuker()
     nukerEnabled = not nukerEnabled
+    nukerButton.BackgroundColor3 = nukerEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+    nukerButton.BackgroundTransparency = nukerEnabled and 0 or 1
+
     if nukerEnabled then
-        nukerButton.BackgroundTransparency = 0
-        nukerButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-        while nukerEnabled do
-            for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
-                if (bed.Primary.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 15 then
-                    local args = {
-                        [1] = bed,
-                        [2] = "Wooden Pickaxe"
-                    }
+        nukerConnection = RunService.Heartbeat:Connect(function()
+            if nukerEnabled then
+                local closestBed = nil
+                local shortestDistance = 15
+                local teamColor = Players.LocalPlayer.TeamColor.Color
+                
+                for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
+                    if bed:FindFirstChild("Primary") then
+                        local distance = (bed.Primary.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                        if distance <= shortestDistance then
+                            if bed.Primary.Color ~= teamColor then
+                                closestBed = bed
+                                shortestDistance = distance
+                            end
+                        end
+                    end
+                end
+                
+                if closestBed then
+                    local args = {closestBed, "Wooden Pickaxe"}
                     ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
                 end
             end
-            wait(0.1)
-        end
+        end)
     else
-        nukerButton.BackgroundTransparency = 1
+        if nukerConnection then
+            nukerConnection:Disconnect()
+        end
     end
 end
 
-nukerButton.MouseButton1Click:Connect(toggleNuker)
+-- Create the X button
+local xButton = Instance.new("TextButton")
+xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+xButton.Position = UDim2.new(1, -50, 0, 10)
+xButton.Size = UDim2.new(0, 40, 0, 40)
+xButton.Font = Enum.Font.SourceSans
+xButton.Text = "X"
+xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+xButton.TextSize = 18
+xButton.TextStrokeTransparency = 0
+xButton.Parent = screenGui
 
--- Collect buttons functionality
-collectDiamondButton.MouseButton1Click:Connect(collectDiamonds)
-collectEmeraldButton.MouseButton1Click:Connect(collectEmeralds)
-collectIronButton.MouseButton1Click:Connect(collectIrons)
-collectAllDiamondsButton.MouseButton1Click:Connect(collectAllDiamonds)
-collectAllEmeraldsButton.MouseButton1Click:Connect(collectAllEmeralds)
+local function closeMainFrame()
+    mainFrame.Visible = false
+    showButton.Visible = true
+    xButton.Visible = false
+end
 
--- Tab button functionality
+xButton.MouseButton1Click:Connect(closeMainFrame)
+
+-- Create the Show button
+local showButton = Instance.new("TextButton")
+showButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
+showButton.Position = UDim2.new(1, -50, 0, 10)
+showButton.Size = UDim2.new(0, 40, 0, 40)
+showButton.Font = Enum.Font.SourceSans
+showButton.Text = "Show"
+showButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+showButton.TextSize = 18
+showButton.TextStrokeTransparency = 0
+showButton.Visible = true
+showButton.Parent = screenGui
+
+local function showMainFrame()
+    mainFrame.Visible = true
+    showButton.Visible = false
+    xButton.Visible = true
+end
+
+showButton.MouseButton1Click:Connect(showMainFrame)
+
+-- Toggle functions
 collectButton.MouseButton1Click:Connect(function()
     collectFrame.Visible = true
     blatantFrame.Visible = false
@@ -317,44 +348,11 @@ blatantButton.MouseButton1Click:Connect(function()
     blatantFrame.Visible = true
 end)
 
--- Create close button (X)
-local xButton = Instance.new("TextButton")
-xButton.Size = UDim2.new(0, 50, 0, 50)
-xButton.Position = UDim2.new(1, -60, 0, -10)
-xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-xButton.Text = "X"
-xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-xButton.Parent = screenGui
+-- Bind toggle functions to buttons
+killAuraButton.MouseButton1Click:Connect(toggleKillAura)
+flyButton.MouseButton1Click:Connect(toggleFly)
+nukerButton.MouseButton1Click:Connect(toggleNuker)
 
-local uiCornerX = Instance.new("UICorner")
-uiCornerX.Parent = xButton
-
--- Create show button
-local showButton = Instance.new("TextButton")
-showButton.Size = UDim2.new(0, 50, 0, 50)
-showButton.Position = UDim2.new(1, -60, 0, -60)
-showButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-showButton.Text = "Show"
-showButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-showButton.Visible = false
-showButton.Parent = screenGui
-
-local uiCornerShow = Instance.new("UICorner")
-uiCornerShow.Parent = showButton
-
--- Close and show button functionality
-xButton.MouseButton1Click:Connect(function()
-    mainFrame.Visible = false
-    xButton.Visible = false
-    showButton.Visible = true
-end)
-
-showButton.MouseButton1Click:Connect(function()
-    mainFrame.Visible = true
-    xButton.Visible = true
-    showButton.Visible = false
-end)
-
--- Destroy anti-cheat
-game.Players.LocalPlayer.Anticheat:Destroy()
+-- Cleanup
+Players.LocalPlayer.Anticheat:Destroy()
 game.StarterPlayer.StarterPlayerScripts.Anticheat:Destroy()
