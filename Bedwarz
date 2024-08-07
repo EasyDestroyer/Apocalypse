@@ -572,4 +572,6 @@ game.StarterPlayer.StarterCharacterScripts.Anticheat:Destroy()
 
 -- Settings
 
+makefile('Apocalypse')
+writefile('Apocalypse/Settings.json', "{}")
 
