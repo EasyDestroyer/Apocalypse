@@ -265,13 +265,8 @@ local function toggleFly()
 
     if flyEnabled then
         Workspace.Gravity = 0
-        Players.LocalPlayer.Character.Humanoid.WalkSpeed = 40
     else
         Workspace.Gravity = 196.2
-        if walkSpeedEnabled then
-        Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
-      else
-        Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
     end
 end
 
