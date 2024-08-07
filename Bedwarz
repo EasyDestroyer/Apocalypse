@@ -356,7 +356,7 @@ local function toggleWalkSpeed()
     if walkSpeedEnabled then
     walkSpeedConnection = RunService.Heartbeat:Connect(function()
      if walkSpeedEnabled then
-      Players.LocalPlayer.Character.Humanoid.WalkSpeed = 22
+      Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
        end
     wait(1)
 end)
