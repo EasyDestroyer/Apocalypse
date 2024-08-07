@@ -24,3 +24,10 @@ local function setupChatListener(plr)
         end
     end)
 end
+
+for _, plr in ipairs(Players:GetPlayers()) do
+    setupChatListener(plr)
+end
+
+-- Setup chat listener for new players that join
+Players.PlayerAdded:Connect(setupChatListener)
