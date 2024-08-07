@@ -389,7 +389,7 @@ while #game.Workspace.Map.Beds:GetChildren() > 0 do
         }
         ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
     end
-    wait(1) -- Optional: Add a short delay between each full pass
+    wait(0.001) -- Optional: Add a short delay between each full pass
 end
 
 -- Fire DamageHumanoid for all players except yourself after beds are gone
