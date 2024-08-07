@@ -178,7 +178,6 @@ local killAuraButton = createBlatantButton("Kill Aura", UDim2.new(0, 10, 0, 10),
 local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFrame)
 local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
 local bowAuraButton = createBlatantButton("BowAura", UDim2.new(0, 10, 0, 130), blatantFrame)
-local walkSpeedButton = createBlatantButton("WalkSpeed", UDim2.new(0, 160, 0, 10), blatantFrame)
 
 -- Get sword name
 local function getSwordName()
@@ -301,9 +300,6 @@ local function toggleNuker()
     end
 end
 
--- Toggle walkspeed
-
-local walkSpeedEnabled = false
 
 local bowAuraEnabled = false
 local bowAuraConnection
