@@ -331,9 +331,6 @@ end
 -- Bind the BowAura toggle function to the button
 bowAuraButton.MouseButton1Click:Connect(toggleBowAura)
 
--- Create the Utility section button
-local utilityButton = createTabButton("Utility", UDim2.new(0, 200, 0, 0), tabContainer)
-
 -- Create Utility frame
 local utilityFrame = Instance.new("Frame")
 utilityFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
@@ -475,11 +472,19 @@ xButton.MouseButton1Click:Connect(closeMainFrame)
 collectButton.MouseButton1Click:Connect(function()
     collectFrame.Visible = true
     blatantFrame.Visible = false
+    utilityFrame.Visible = false
 end)
 
 blatantButton.MouseButton1Click:Connect(function()
     collectFrame.Visible = false
     blatantFrame.Visible = true
+    utilityFrame.Visible = false
+end)
+
+utilityButton.MouseButton1Click:Connect(function()
+    collectFrame.Visible = false
+    blatantFrame.Visible = false
+    utilityFrame.Visible = true
 end)
 
 -- Bind toggle functions to buttons
