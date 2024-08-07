@@ -567,8 +567,3 @@ end)
 Players.LocalPlayer.Character.Anticheat:Destroy()
 game.StarterPlayer.StarterCharacterScripts.Anticheat:Destroy()
 
--- Settings
-
-makefile('Apocalypse')
-writefile('Apocalypse/Settings.json', "{}")
-
