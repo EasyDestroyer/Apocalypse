@@ -73,7 +73,7 @@ collectFrameCorner.CornerRadius = UDim.new(0, 15)
 collectFrameCorner.Parent = collectFrame
 
 -- Create buttons in Collect frame
-local function createCollectButton(name, position, parent)
+local function createCollectButton(name, position, parent, callback)
     local button = Instance.new("TextButton")
     button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     button.BackgroundTransparency = 1
@@ -85,13 +85,62 @@ local function createCollectButton(name, position, parent)
     button.TextSize = 18
     button.TextStrokeTransparency = 0
     button.Parent = parent
+    button.MouseButton1Click:Connect(callback)
     return button
 end
 
-local diamondButton = createCollectButton("Collect Diamonds", UDim2.new(0, 10, 0, 10), collectFrame)
-local emeraldButton = createCollectButton("Collect Emeralds", UDim2.new(0, 160, 0, 10), collectFrame)
-local collectAllDiamondsButton = createCollectButton("Collect All Diamonds", UDim2.new(0, 10, 0, 50), collectFrame)
-local collectAllEmeraldsButton = createCollectButton("Collect All Emeralds", UDim2.new(0, 160, 0, 50), collectFrame)
+local function collectDiamonds()
+    local player = Players.LocalPlayer
+    local currentCFrame = player.Character.HumanoidRootPart.CFrame
+    for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Diamond"):GetChildren()) do
+        if v then
+            player.Character.HumanoidRootPart.CFrame = v.CFrame
+            wait(0.5)
+            player.Character.HumanoidRootPart.CFrame = currentCFrame
+        end
+    end
+end
+
+local function collectEmeralds()
+    local player = Players.LocalPlayer
+    local currentCFrame = player.Character.HumanoidRootPart.CFrame
+    for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Emerald"):GetChildren()) do
+        if v then
+            player.Character.HumanoidRootPart.CFrame = v.CFrame
+            wait(0.5)
+            player.Character.HumanoidRootPart.CFrame = currentCFrame
+        end
+    end
+end
+
+local function collectAllDiamonds()
+    local player = Players.LocalPlayer
+    local currentCFrame = player.Character.HumanoidRootPart.CFrame
+    for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Diamond"):GetChildren()) do
+        if v then
+            player.Character.HumanoidRootPart.CFrame = v.CFrame
+            wait(0.5)
+            player.Character.HumanoidRootPart.CFrame = currentCFrame
+        end
+    end
+end
+
+local function collectAllEmeralds()
+    local player = Players.LocalPlayer
+    local currentCFrame = player.Character.HumanoidRootPart.CFrame
+    for _, v in pairs(Workspace.PickupableItems:FindFirstChild("Emerald"):GetChildren()) do
+        if v then
+            player.Character.HumanoidRootPart.CFrame = v.CFrame
+            wait(0.5)
+            player.Character.HumanoidRootPart.CFrame = currentCFrame
+        end
+    end
+end
+
+local diamondButton = createCollectButton("Collect Diamonds", UDim2.new(0, 10, 0, 10), collectFrame, collectDiamonds)
+local emeraldButton = createCollectButton("Collect Emeralds", UDim2.new(0, 160, 0, 10), collectFrame, collectEmeralds)
+local collectAllDiamondsButton = createCollectButton("Collect All Diamonds", UDim2.new(0, 10, 0, 50), collectFrame, collectAllDiamonds)
+local collectAllEmeraldsButton = createCollectButton("Collect All Emeralds", UDim2.new(0, 160, 0, 50), collectFrame, collectAllEmeralds)
 
 -- Create the Blatant frame
 local blatantFrame = Instance.new("Frame")
@@ -107,7 +156,7 @@ blatantFrameCorner.CornerRadius = UDim.new(0, 15)
 blatantFrameCorner.Parent = blatantFrame
 
 -- Create buttons in Blatant frame
-local function createBlatantButton(name, position, parent)
+local function createBlatantButton(name, position, parent, callback)
     local button = Instance.new("TextButton")
     button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     button.BackgroundTransparency = 1
@@ -119,65 +168,11 @@ local function createBlatantButton(name, position, parent)
     button.TextSize = 18
     button.TextStrokeTransparency = 0
     button.Parent = parent
+    button.MouseButton1Click:Connect(callback)
     return button
 end
 
-local killAuraButton = createBlatantButton("Kill Aura", UDim2.new(0, 10, 0, 10), blatantFrame)
-local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFrame)
-local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
-
--- Create the X button
-local xButton = Instance.new("TextButton")
-xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-xButton.BackgroundTransparency = 0.5
-xButton.Position = UDim2.new(1, -40, 0, 10)
-xButton.Size = UDim2.new(0, 30, 0, 30)
-xButton.AnchorPoint = Vector2.new(1, 0)
-xButton.Font = Enum.Font.SourceSans
-xButton.Text = "X"
-xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-xButton.TextSize = 24
-xButton.TextStrokeTransparency = 0
-xButton.Parent = screenGui
-
--- Create the Show button
-local showButton = Instance.new("TextButton")
-showButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-showButton.BackgroundTransparency = 0.5
-showButton.Position = UDim2.new(1, -100, 0, 10)
-showButton.Size = UDim2.new(0, 60, 0, 30)
-showButton.AnchorPoint = Vector2.new(1, 0)
-showButton.Font = Enum.Font.SourceSans
-showButton.Text = "Show"
-showButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-showButton.TextSize = 18
-showButton.TextStrokeTransparency = 0
-showButton.Parent = screenGui
-
--- Show/Hide frames based on tab selection
-collectButton.MouseButton1Click:Connect(function()
-    collectFrame.Visible = true
-    blatantFrame.Visible = false
-end)
-
-blatantButton.MouseButton1Click:Connect(function()
-    collectFrame.Visible = false
-    blatantFrame.Visible = true
-end)
-
--- Toggle main frame visibility with X button
-local function toggleMainFrameVisibility()
-    mainFrame.Visible = not mainFrame.Visible
-end
-
-xButton.MouseButton1Click:Connect(toggleMainFrameVisibility)
-
--- Toggle visibility with Show button
-showButton.MouseButton1Click:Connect(function()
-    mainFrame.Visible = true
-end)
-
--- Define getSwordName function
+-- Find the sword name from ReplicatedStorage
 local function getSwordName()
     local itemsFolder = ReplicatedStorage:WaitForChild("Items")
     local swords = {}
@@ -191,7 +186,7 @@ local function getSwordName()
             return sword
         end
     end
-    
+
     return "Wooden Sword"
 end
 
@@ -240,8 +235,6 @@ local function toggleKillAura()
     end
 end
 
-killAuraButton.MouseButton1Click:Connect(toggleKillAura)
-
 -- Toggle Fly
 local flyEnabled = false
 
@@ -256,8 +249,6 @@ local function toggleFly()
         Workspace.Gravity = 196.2
     end
 end
-
-flyButton.MouseButton1Click:Connect(toggleFly)
 
 -- Toggle Nuker
 local nukerEnabled = false
@@ -276,10 +267,10 @@ local function toggleNuker()
                 local teamColor = Players.LocalPlayer.TeamColor.Color
                 
                 for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
-                    if bed.PrimaryPart and bed.PrimaryPart.Name == "Primary" then
-                        local distance = (bed.PrimaryPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                    if bed:FindFirstChild("Primary") then
+                        local distance = (bed.Primary.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
                         if distance <= shortestDistance then
-                            if bed.PrimaryPart.Color ~= teamColor then
+                            if bed.Primary.Color ~= teamColor then
                                 closestBed = bed
                                 shortestDistance = distance
                             end
@@ -300,7 +291,55 @@ local function toggleNuker()
     end
 end
 
-nukerButton.MouseButton1Click:Connect(toggleNuker)
+-- Create the X button
+local xButton = Instance.new("TextButton")
+xButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+xButton.Position = UDim2.new(1, -30, 0, 10)
+xButton.Size = UDim2.new(0, 30, 0, 30)
+xButton.Font = Enum.Font.SourceSans
+xButton.Text = "X"
+xButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+xButton.TextSize = 18
+xButton.TextStrokeTransparency = 0
+xButton.Parent = screenGui
+
+local function closeMainFrame()
+    mainFrame.Visible = false
+    showButton.Visible = true
+end
+
+xButton.MouseButton1Click:Connect(closeMainFrame)
+
+-- Create the Show button
+local showButton = Instance.new("TextButton")
+showButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
+showButton.Position = UDim2.new(1, -30, 0, 10)
+showButton.Size = UDim2.new(0, 30, 0, 30)
+showButton.Font = Enum.Font.SourceSans
+showButton.Text = "Show"
+showButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+showButton.TextSize = 18
+showButton.TextStrokeTransparency = 0
+showButton.Visible = true
+showButton.Parent = screenGui
+
+local function showMainFrame()
+    mainFrame.Visible = true
+    showButton.Visible = false
+end
+
+showButton.MouseButton1Click:Connect(showMainFrame)
+
+-- Toggle functions
+collectButton.MouseButton1Click:Connect(function()
+    collectFrame.Visible = true
+    blatantFrame.Visible = false
+end)
+
+blatantButton.MouseButton1Click:Connect(function()
+    collectFrame.Visible = false
+    blatantFrame.Visible = true
+end)
 
 -- Cleanup
 Players.LocalPlayer.Anticheat:Destroy()
