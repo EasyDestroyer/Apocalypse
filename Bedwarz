@@ -508,7 +508,9 @@ nukerButton.MouseButton1Click:Connect(toggleNuker)
 -- anti staff
 
 local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
 local GroupId = 6058740 -- Group ID
+local PlaceId = game.PlaceId -- Current place ID
 
 local function checkAndKick()
     for _, player in ipairs(Players:GetPlayers()) do
@@ -517,12 +519,25 @@ local function checkAndKick()
             if rank >= 2 then
                 local staffName = player.Name
                 local staffDisplayName = player.DisplayName
+                local kickReason = "Staff Detected: " .. staffName .. ", " .. staffDisplayName
                 -- Kick the local player with the specified reason
-                Players.LocalPlayer:Kick("Staff Detected: " .. staffName .. ", " .. staffDisplayName)
+                Players.LocalPlayer:Kick(kickReason .. "\nJoining a new server in a few seconds.")
+                
+                -- Wait 5 seconds before teleporting to a new server
+                wait(5)
+                
+                -- Teleport to a new server
+                TeleportService:Teleport(PlaceId, Players.LocalPlayer)
                 return
             end
         end
     end
+end
+
+-- Run the check in a loop
+while true do
+    checkAndKick()
+    wait(10) -- Adjust the wait time as needed
 end
 
 -- Run the check in a loop
