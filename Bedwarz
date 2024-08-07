@@ -203,7 +203,7 @@ local function findClosestPlayer(maxDistance)
     for _, player in pairs(Players:GetPlayers()) do
         if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
             local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
-            if distance < shortestDistance then
+            if distance < shortestDistance and player.Team ~= Players.LocalPlayer.Team then
                 closestPlayer = player
                 shortestDistance = distance
             end
@@ -276,7 +276,7 @@ local function toggleNuker()
                 local teamColor = Players.LocalPlayer.TeamColor.Color
                 
                 for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
-                    if bed.PrimaryPart then
+                    if bed.PrimaryPart and bed.PrimaryPart.Name == "Primary" then
                         local distance = (bed.PrimaryPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
                         if distance <= shortestDistance then
                             if bed.PrimaryPart.Color ~= teamColor then
