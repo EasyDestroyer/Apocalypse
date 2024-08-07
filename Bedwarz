@@ -464,13 +464,6 @@ showButton.Parent = screenGui
 
 
 
--- Show settings frame when settings button is clicked
-settingsButton.MouseButton1Click:Connect(function()
-    settingsFrame.Visible = not settingsFrame.Visible
-end)
-
-
-
 -- Ensure initial visibility
 xButton.Visible = true
 showButton.Visible = true
