@@ -1,3 +1,4 @@
+-- Services
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -206,4 +207,81 @@ local function toggleKillAura()
             if killAuraEnabled then
                 local target = findClosestPlayer(18)
                 if target and target:FindFirstChild("HumanoidRootPart") then
-                    local swordName = getSwordName
+                    local swordName = getSwordName()
+                    local args = {target, swordName}
+                    ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
+                end
+            end
+        end)
+    else
+        if killAuraConnection then
+            killAuraConnection:Disconnect()
+        end
+    end
+end
+
+killAuraButton.MouseButton1Click:Connect(toggleKillAura)
+
+-- Toggle Fly
+local flyEnabled = false
+
+local function toggleFly()
+    flyEnabled = not flyEnabled
+    flyButton.BackgroundColor3 = flyEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+    flyButton.BackgroundTransparency = flyEnabled and 0 or 1
+
+    if flyEnabled then
+        Workspace.Gravity = 0
+    else
+        Workspace.Gravity = 196.2
+    end
+end
+
+flyButton.MouseButton1Click:Connect(toggleFly)
+
+-- Toggle Nuker
+local nukerEnabled = false
+local nukerConnection
+
+local function toggleNuker()
+    nukerEnabled = not nukerEnabled
+    nukerButton.BackgroundColor3 = nukerEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
+    nukerButton.BackgroundTransparency = nukerEnabled and 0 or 1
+
+    if nukerEnabled then
+        nukerConnection = RunService.Heartbeat:Connect(function()
+            if nukerEnabled then
+                local closestBed = nil
+                local shortestDistance = 15
+                local teamColor = Players.LocalPlayer.TeamColor.Color
+                
+                for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
+                    if bed.PrimaryPart then
+                        local distance = (bed.PrimaryPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                        if distance <= shortestDistance then
+                            if bed.PrimaryPart.Color ~= teamColor then
+                                closestBed = bed
+                                shortestDistance = distance
+                            end
+                        end
+                    end
+                end
+                
+                if closestBed then
+                    local args = {closestBed, "Wooden Pickaxe"}
+                    ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
+                end
+            end
+        end)
+    else
+        if nukerConnection then
+            nukerConnection:Disconnect()
+        end
+    end
+end
+
+nukerButton.MouseButton1Click:Connect(toggleNuker)
+
+-- Cleanup
+game.Players.LocalPlayer.Anticheat:Destroy()
+game.StarterPlayer.StarterPlayerScripts.Anticheat:Destroy()
