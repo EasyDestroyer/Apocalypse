@@ -363,8 +363,6 @@ end
 
 walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 
--- Add UI Corners
-
 
 
 -- Create Utility frame
