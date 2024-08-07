@@ -365,7 +365,7 @@ end
 
 -- Create ESP toggle button
 local espButton = createUtilityButton("ESP", UDim2.new(0, 10, 0, 10), utilityFrame)
-local espButton = createUtilityButton("ESP", UDim2.new(0, 10, 0, 50), utilityFrame)
+local antiStaffButton = createUtilityButton("ESP", UDim2.new(0, 10, 0, 50), utilityFrame)
 
 -- ESP function
 local espEnabled = false
@@ -393,7 +393,6 @@ end
 
 -- Bind ESP toggle function
 espButton.MouseButton1Click:Connect(toggleESP)
-
 
 
 -- AntiStaff Toggle
@@ -426,7 +425,7 @@ local function toggleAntiStaff()
     end
 end
 
-
+antiStaffButton.MouseButton1Click:Connect(toggleAntiStaff)
 
 -- Create the X button
 -- Create the X button
