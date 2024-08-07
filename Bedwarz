@@ -231,11 +231,6 @@ end
 -- Toggle Kill Aura
 local killAuraEnabled = false
 local killAuraConnection
-local swordName = "Wooden Sword"
-
-while wait(1) do
-swordName = getSwordName()
-end
 
 local function toggleKillAura()
     killAuraEnabled = not killAuraEnabled
@@ -246,6 +241,7 @@ local function toggleKillAura()
         killAuraConnection = RunService.Heartbeat:Connect(function()
             if killAuraEnabled then
                 local target = findClosestPlayer(18)
+                local swordName = getSwordName()
                 if target then
                     local args = {target.Character, swordName}
                     ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
