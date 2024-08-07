@@ -314,7 +314,7 @@ if walkSpeedEnabled then
 while wait(1) do
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 22
 end
-end
+
 
 walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 
