@@ -365,15 +365,10 @@ end)
 end
 end
 
-while true do
-if walkSpeedEnabled then
-Players.LocalPlayer.Character.Humanoid.WalkSpeed = 22
-wait(1)
-end
-end
-
 walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
- 
+
+-- Add UI Corners
+
 addUICorner(killAuraButton)
 addUICorner(nukerButton)
 addUICorner(bowAuraButton)
