@@ -8,6 +8,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
+local backpack = Players.LocalPlayer.Backpack
 
 -- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
@@ -259,9 +260,14 @@ function updateSwordName()
 swordName = getSwordName()
 end
 
-while true do
+if backpack:FindFirstChild("Diamond Sword") then
 updateSwordName()
-wait(1)
+elseif backpack:FindFirstChild("Stone Sword") then
+updateSwordName()
+elseif backpack:FindFirstChild("Iron Sword") then
+updateSwordName()
+elseif backpack:FindFirstChild("Emerald Sword") then
+updateSwordName()
 end
 
 -- Toggle Fly
