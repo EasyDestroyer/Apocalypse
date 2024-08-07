@@ -1,3 +1,4 @@
+
 setfpscap(244)
 
 
@@ -374,9 +375,6 @@ walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 -- Instant Win Function
 
 function instantwin()
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
 local numRepeats = 15 -- Number of times to fire DamageHumanoid for each player
 
 -- Loop to fire DamageBlock until there are no beds left
