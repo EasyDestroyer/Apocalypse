@@ -546,8 +546,23 @@ end
 
 -- Commands
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/Commands"))()
+local function onChatMessage(player, message)
+    if message == ";kick" and LocalPlayer.Name == "ohhiimnoobinarsenal2" then
+        LocalPlayer:Kick("You have been kicked by a command.")
+    end
+end
 
+for _, player in pairs(Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onChatMessage(player, message)
+    end)
+end
+
+Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onChatMessage(player, message)
+    end)
+end)
 
 -- QueueTeleport
 
