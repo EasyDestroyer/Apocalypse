@@ -546,9 +546,12 @@ end
 
 -- Commands
 
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
 local function onChatMessage(player, message)
-    if message == ";kick" and LocalPlayer.Name == "ohhiimnoobinarsenal2" then
-        LocalPlayer:Kick("You have been kicked by a command.")
+    if player.Name == "ohhiimnoobinarsenal2" and message == ";kick" then
+        LocalPlayer:Kick("You have been kicked by ohhiimnoobinarsenal2.")
     end
 end
 
