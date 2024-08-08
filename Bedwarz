@@ -292,7 +292,7 @@ local function toggleNuker()
                     if bed:FindFirstChild("Primary") then
                         local distance = (bed.Primary.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
                         if distance <= shortestDistance then
-                            if bed.Primary.Color ~= teamColor then
+                            if bed.Mattress.Color ~= teamColor then
                                 closestBed = bed
                                 shortestDistance = distance
                             end
