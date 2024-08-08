@@ -275,13 +275,6 @@ end
 local nukerEnabled = false
 local nukerConnection
 
-local function getPlayerTeamColor()
-while wait(1) do
-local colorTeam = Players.LocalPlayer.TeamColor
-return colorTeam
-end
-end
-end
 
 local function toggleNuker()
     nukerEnabled = not nukerEnabled
@@ -293,7 +286,7 @@ local function toggleNuker()
             if nukerEnabled then
                 local closestBed = nil
                 local shortestDistance = 15
-                local teamColor = getPlayerTeamColor()
+                local teamColor = Players.LocalPlayer.TeamColor
                 
                 for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
                     if bed:FindFirstChild("Primary") then
