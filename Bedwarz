@@ -9,6 +9,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 local backpack = Players.LocalPlayer.Backpack
+local teamColor = Players.LocalPlayer.TeamColor
 
 -- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
@@ -215,7 +216,6 @@ local function findClosestPlayer(maxDistance)
 
     for _, player in pairs(Players:GetPlayers()) do
         if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local playerTeam = player.Team
             if playerTeam ~= localPlayerTeam then
                 local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
                 if distance < shortestDistance then
@@ -286,7 +286,7 @@ local function toggleNuker()
             if nukerEnabled then
                 local closestBed = nil
                 local shortestDistance = 15
-                local teamColor = Players.LocalPlayer.TeamColor.Color
+                
                 
                 for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
                     if bed:FindFirstChild("Primary") then
@@ -543,6 +543,12 @@ end
 while true do
     checkAndKick()
     wait(0.1) -- Adjust the wait time as needed
+end
+
+-- Update teamcolor
+
+while wait(1) do
+teamColor = Players.LocalPlayer.TeamColor
 end
 
 -- Commands
