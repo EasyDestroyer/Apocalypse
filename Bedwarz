@@ -281,7 +281,11 @@ end
 -- Toggle Nuker
 local nukerEnabled = false
 local nukerConnection
+local teamColor = Players.LocalPlayer.TeamColor
 
+RunService.Heartbeat:Connect(function()
+    teamColor = Players.LocalPlayer.TeamColor
+end)
 
 local function toggleNuker()
     nukerEnabled = not nukerEnabled
@@ -293,8 +297,7 @@ local function toggleNuker()
             if nukerEnabled then
                 local closestBed = nil
                 local shortestDistance = 15
-                local teamColor = Players.LocalPlayer.TeamColor
-
+                
                 for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
                     if bed:FindFirstChild("Primary") then
                         local distance = (bed.Primary.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
