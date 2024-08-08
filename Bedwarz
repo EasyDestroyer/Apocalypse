@@ -9,7 +9,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 local backpack = Players.LocalPlayer.Backpack
-local teamColor = Players.LocalPlayer.TeamColor
 
 -- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
@@ -276,6 +275,14 @@ end
 local nukerEnabled = false
 local nukerConnection
 
+local function getPlayerTeamColor()
+while wait(1) do
+local colorTeam = Players.LocalPlayer.TeamColor
+return colorTeam
+end
+end
+end
+
 local function toggleNuker()
     nukerEnabled = not nukerEnabled
     nukerButton.BackgroundColor3 = nukerEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
@@ -286,7 +293,7 @@ local function toggleNuker()
             if nukerEnabled then
                 local closestBed = nil
                 local shortestDistance = 15
-                
+                local teamColor = getPlayerTeamColor()
                 
                 for _, bed in pairs(Workspace.Map.Beds:GetChildren()) do
                     if bed:FindFirstChild("Primary") then
@@ -543,12 +550,6 @@ end
 while true do
     checkAndKick()
     wait(0.1) -- Adjust the wait time as needed
-end
-
--- Update teamcolor
-
-while wait(1) do
-teamColor = Players.LocalPlayer.TeamColor
 end
 
 -- Commands
