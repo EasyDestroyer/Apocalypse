@@ -12,7 +12,7 @@ local backpack = Players.LocalPlayer.Backpack
 
 -- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "SampleGui"
+screenGui.Name = math.random(1000000, 99999999999)
 screenGui.Parent = Players.LocalPlayer.PlayerGui
 screenGui.ResetOnSpawn = false
 
