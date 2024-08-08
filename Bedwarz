@@ -208,15 +208,22 @@ local function getSwordName()
 end
 
 -- Find closest player excluding team members
+local localPlayer = Players.LocalPlayer
+local localPlayerTeam = localPlayer.Team
+
+-- Update the localPlayerTeam every second
+RunService.Heartbeat:Connect(function()
+    localPlayerTeam = localPlayer.Team
+end)
+
 local function findClosestPlayer(maxDistance)
     local closestPlayer = nil
     local shortestDistance = maxDistance
-    local localPlayerTeam = Players.LocalPlayer.Team
 
     for _, player in pairs(Players:GetPlayers()) do
-        if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            if player ~= localPlayerTeam then
-                local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            if player.Team ~= localPlayerTeam then
+                local distance = (player.Character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).magnitude
                 if distance < shortestDistance then
                     closestPlayer = player
                     shortestDistance = distance
@@ -224,7 +231,7 @@ local function findClosestPlayer(maxDistance)
             end
         end
     end
-
+    
     return closestPlayer
 end
 
