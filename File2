@@ -25,3 +25,11 @@ local function setupChatListener(plr)
     end
     end)
 end
+
+for _, players in pairs(Players:GetPlayers()) do
+setupChatListener(players)
+end
+
+game.Players.PlayerAdded:Connect(function(player)
+setupChatListener(player)
+end
