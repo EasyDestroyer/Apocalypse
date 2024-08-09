@@ -203,6 +203,7 @@ local function getSwordName()
         if Players.LocalPlayer.Backpack:FindFirstChild(sword) then
             return sword
     end
+return 'Wooden Sword'
   end
 end
 
