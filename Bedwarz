@@ -213,7 +213,7 @@ local localPlayerTeam = localPlayer.Team
 
 -- Update the localPlayerTeam every second
 RunService.Heartbeat:Connect(function()
-    localPlayerTeam = localPlayer.Team
+    local localPlayerTeam = localPlayer.Team
 end)
 
 local function findClosestPlayer(maxDistance)
@@ -241,7 +241,11 @@ local killAuraConnection
 local swordName = getSwordName()
 
 RunService.Heartbeat:Connect(function()
-    swordName = getSwordName()
+    local newSwordName = getSwordName()
+    if newSwordName ~= swordName then
+        swordName = newSwordName
+        -- Handle sword name change if needed
+    end
 end)
 
 local function toggleKillAura()
