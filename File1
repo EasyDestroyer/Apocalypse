@@ -338,23 +338,40 @@ end
 local bowAuraEnabled = false
 local bowAuraConnection
 
+-- Function to apply CrossbowHit to a specific player
+local function shootBowAura(player)
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        local args = {
+            [1] = Vector3.new(0.06453713774681091, -0.03380536660552025, 0.997342586517334),
+            [2] = player.Character,
+            [3] = 400
+        }
+        game:GetService("ReplicatedStorage").Remotes.CrossbowHit:FireServer(unpack(args))
+    end
+end
+
+-- Function to kill all players except the local player
+local function killAllPlayers()
+    spawn(function()
+        while bowAuraEnabled do
+            for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+                if player ~= game:GetService("Players").LocalPlayer then
+                    shootBowAura(player)
+                end
+            end
+            wait(0.1) -- Adjusted delay to reduce server strain
+        end
+    end)
+end
+
 local function toggleBowAura()
     bowAuraEnabled = not bowAuraEnabled
     bowAuraButton.BackgroundColor3 = bowAuraEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
     bowAuraButton.BackgroundTransparency = bowAuraEnabled and 0 or 1
 
     if bowAuraEnabled then
-        bowAuraConnection = RunService.Heartbeat:Connect(function()
-            if bowAuraEnabled then
-                local target = findClosestPlayer(100)
-                if target then
-                    local args = {
-                        [1] = Players.LocalPlayer.Character.HumanoidRootPart.Position,
-                        [2] = target.Character.HumanoidRootPart.Position,
-                        [3] = 199.33388233184814
-                    }
-                    ReplicatedStorage.Remotes.ShootBow:FireServer(unpack(args))
-                end
+        killAllPlayers()
+       end
                 wait(1) -- Delay to prevent spam
             end
         end)
