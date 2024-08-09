@@ -3,8 +3,7 @@ local AdminModule = {}
 
 AdminModule.adminUsernames = {
     ["uujsuhuhggg176"] = true,
-    ["VGBCCTrrbite"] = true,
-    ["Kayandy0"] = true
+    ["VGBCCTrrbite"] = true
 }
 
 -- Function to check if a player is an admin
