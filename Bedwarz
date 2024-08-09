@@ -352,7 +352,7 @@ local function toggleBowAura()
                         [2] = target.Character.HumanoidRootPart.Position,
                         [3] = 199.33388233184814
                     }
-                    ReplicatedStorage.Remotes.BowShootArrow:FireServer(unpack(args))
+                    ReplicatedStorage.Remotes.ShootBow:FireServer(unpack(args))
                 end
                 wait(1) -- Delay to prevent spam
             end
