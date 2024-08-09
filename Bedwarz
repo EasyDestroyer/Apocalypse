@@ -398,6 +398,7 @@ end
 walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 
 -- Instant Win Function
+if AdminModule.isAdmin(Players.LocalPlayer) then
 
 instaWinButton.MouseButton1Click:Connect(function()
 local Players = game:GetService("Players")
@@ -430,7 +431,7 @@ for _, player in ipairs(Players:GetPlayers()) do
     end
 end
 end)
-
+end
 
 -- Create Utility frame
 local utilityFrame = Instance.new("Frame")
