@@ -12,14 +12,4 @@ function AdminModule.isAdmin(player)
     return AdminModule.adminUsernames[player.Name] ~= nil
 end
 
-function AdminModule.RemoveAdmin(username)
-    if AdminList[username] then
-        AdminList[username] = false
-    end
-end
-
-function AdminModule.AddAdmin(username)
-    AdminList[username] = true
-end
-
 return AdminModule
