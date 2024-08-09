@@ -205,7 +205,7 @@ local function getSwordName()
         end
     end
     
-    return 'Wooden Sword' -- Return 'Wooden Sword' if no swords are found
+    return 'Emerald Sword' -- Return 'Emerald Sword' if no swords are found
 end
 
 -- Find closest player excluding team members
