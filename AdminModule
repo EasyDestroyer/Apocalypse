@@ -14,7 +14,7 @@ end
 
 function AdminModule.RemoveAdmin(username)
     if AdminList[username] then
-        AdminList[username] = nil
+        AdminList[username] = false
     end
 end
 
