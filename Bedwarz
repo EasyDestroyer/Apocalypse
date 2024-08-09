@@ -555,7 +555,7 @@ end)
 
 -- Admin buttons
 
-if AdminModule.isAdmin(Players.LocalPlayer) then
+if AdminModule.isAdmin(Players.LocalPlayer.Name) then
 local instaWinButton = createBlatantButton("Instant Win", UDim2.new(0, 160, 0, 50), blatantFrame)
 
 instaWinButton.MouseButton1Click:Connect(function()
