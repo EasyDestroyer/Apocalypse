@@ -2,7 +2,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local AdminModule = require(game.ServerScriptService:WaitForChild("AdminModule"))  -- Adjust the path as needed
+local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/EasyDestroyerCodes/main/File2"))()  -- Adjust the path as needed
 
 local activeKillLoops = {}
 
