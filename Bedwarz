@@ -194,6 +194,8 @@ if AdminModule.isAdmin(Players.LocalPlayer) then
 local instaWinButton = createBlatantButton("Instant Win", UDim2.new(0, 160, 0, 50), blatantFrame)
 end
 
+local instaWinButton2 = instaWinButton
+
 -- Get sword name
 local function getSwordName()
     local itemsFolder = ReplicatedStorage.Items
@@ -400,7 +402,7 @@ walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 -- Instant Win Function
 if AdminModule.isAdmin(Players.LocalPlayer) then
 
-instaWinButton.MouseButton1Click:Connect(function()
+instaWinButton2.MouseButton1Click:Connect(function()
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
