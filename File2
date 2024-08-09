@@ -1,10 +1,9 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/EasyDestroyerCodes/main/File2"))()  -- Adjust the path as needed
-
-local activeKillLoops = {}
+local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/EasyDestroyerCodes/main/File2"))()  -- Ensure this path is correct
 
 local function executeHumanoidDamage(humanoid)
+    print("Executing damage on humanoid:", humanoid) -- Debug print
     local args = {
         [1] = humanoid,
         [2] = "inf"
@@ -14,21 +13,40 @@ end
 
 local function setupChatListener(plr)
     plr.Chatted:Connect(function(msg)
+        print("Message received from", plr.Name, ":", msg) -- Debug print
         local FirstWord, User = msg:match("^(;kill)%s*(.+)$")
     
-        if FirstWord and User and AdminModule.isAdmin(plr) then
-            local targetPlayer = Players:FindFirstChild(User:match("^%s*(.-)%s*$"))  -- Trims any extra spaces from the username
-            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
-                executeHumanoidDamage(targetPlayer.Character.Humanoid)
+        if FirstWord and User then
+            print("Kill command detected from", plr.Name, ". Checking admin status...") -- Debug print
+            if AdminModule.isAdmin(plr) then
+                print(plr.Name, "is an admin. Proceeding to find target player.") -- Debug print
+                local targetPlayer = Players:FindFirstChild(User:match("^%s*(.-)%s*$"))
+                if targetPlayer then
+                    print("Target player found:", targetPlayer.Name) -- Debug print
+                    local humanoid = targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid")
+                    if humanoid then
+                        executeHumanoidDamage(humanoid)
+                    else
+                        print("Target player has no humanoid.") -- Debug print
+                    end
+                else
+                    print("Target player not found.") -- Debug print
+                end
+            else
+                print(plr.Name, "is not an admin.") -- Debug print
             end
+        else
+            print("No valid command detected in the message.") -- Debug print
         end
     end)
 end
 
+-- Set up chat listeners for existing players
 for _, player in pairs(Players:GetPlayers()) do
     setupChatListener(player)
 end
 
+-- Set up chat listener for players who join later
 Players.PlayerAdded:Connect(function(player)
     setupChatListener(player)
 end)
