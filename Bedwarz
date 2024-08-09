@@ -208,6 +208,7 @@ local function getSwordName()
     return "Wooden Sword"
   end
 end
+end
 
 -- Find closest player excluding team members
 local localPlayer = Players.LocalPlayer
