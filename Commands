@@ -2,7 +2,9 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/Apocalypse/main/AdminModule"))()
+local AdminModule = require(game.ServerScriptService:WaitForChild("AdminModule"))  -- Adjust the path as needed
+
+local activeKillLoops = {}
 
 local function executeHumanoidDamage(humanoid)
     local args = {
@@ -15,11 +17,27 @@ end
 local function setupChatListener(plr)
     plr.Chatted:Connect(function(msg)
         local FirstWord, User = msg:match("^(;kill)%s*(.+)$")
-        
+        local _, TargetUser = msg:match("^(;loopkill)%s*(.+)$")
+        local _, UnloopUser = msg:match("^(;unloopkill)%s*(.+)$")
+
         if FirstWord and User and AdminModule.isAdmin(plr) then
             local targetPlayer = Players:FindFirstChild(User)
             if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
                 executeHumanoidDamage(targetPlayer.Character.Humanoid)
+            end
+        elseif TargetUser and AdminModule.isAdmin(plr) then
+            local targetPlayer = Players:FindFirstChild(TargetUser)
+            if targetPlayer then
+                activeKillLoops[targetPlayer] = true
+                while activeKillLoops[targetPlayer] and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") do
+                    executeHumanoidDamage(targetPlayer.Character.Humanoid)
+                    wait(1)  -- Adjust the wait time as needed
+                end
+            end
+        elseif UnloopUser and AdminModule.isAdmin(plr) then
+            local targetPlayer = Players:FindFirstChild(UnloopUser)
+            if targetPlayer then
+                activeKillLoops[targetPlayer] = nil
             end
         end
     end)
@@ -29,7 +47,6 @@ for _, plr in ipairs(Players:GetPlayers()) do
     setupChatListener(plr)
 end
 
--- Setup chat listener for new players that join
 Players.PlayerAdded:Connect(setupChatListener)
 
 -- Remove admin
