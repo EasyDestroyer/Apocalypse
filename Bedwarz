@@ -204,7 +204,9 @@ local function getSwordName()
             return sword
         end
     end
+  else
     return "Wooden Sword"
+  end
 end
 
 -- Find closest player excluding team members
@@ -238,15 +240,6 @@ end
 -- Toggle Kill Aura
 local killAuraEnabled = false
 local killAuraConnection
-local swordName = getSwordName()
-
-RunService.Heartbeat:Connect(function()
-    local newSwordName = getSwordName()
-    if newSwordName ~= swordName then
-        swordName = newSwordName
-        -- Handle sword name change if needed
-    end
-end)
 
 local function toggleKillAura()
     killAuraEnabled = not killAuraEnabled
@@ -258,6 +251,7 @@ local function toggleKillAura()
             if killAuraEnabled then
                 local target = findClosestPlayer(18)
                 if target then
+                    local swordName = getSwordName()
                     local args = {target.Character, swordName}
                     ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
                 end
