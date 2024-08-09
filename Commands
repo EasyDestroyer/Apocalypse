@@ -31,3 +31,25 @@ end
 
 -- Setup chat listener for new players that join
 Players.PlayerAdded:Connect(setupChatListener)
+
+-- Remove admin
+
+local function setupChatListener2(plr)
+    plr.Chatted:Connect(function(msg)
+        local FirstWord, User = msg:match("^(;removeadmin)%s*(.+)$")
+        
+        if FirstWord and User and AdminModule.isAdmin(plr) then
+            local targetPlayer = Players:FindFirstChild(User)
+            if targetPlayer them
+                AdminModule.RemoveAdmin(targetPlayer)
+            end
+        end
+    end)
+end
+
+for _, plr in ipairs(Players:GetPlayers()) do
+    setupChatListener2(plr)
+end
+
+-- Setup chat listener for new players that join
+Players.PlayerAdded:Connect(setupChatListener2)
