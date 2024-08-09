@@ -202,13 +202,8 @@ local function getSwordName()
     for _, sword in pairs(swords) do
         if Players.LocalPlayer.Backpack:FindFirstChild(sword) then
             return sword
-        end
     end
-  else
-    return "Wooden Sword"
   end
-  end
-end
 end
 
 -- Find closest player excluding team members
