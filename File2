@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/EasyDestroyerCodes/main/File2"))()  -- Ensure this path is correct
+local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/EasyDestroyerCodes/main/AdminModule"))()  -- Ensure this path is correct
 
 local function executeHumanoidDamage(humanoid)
     print("Executing damage on humanoid:", humanoid) -- Debug print
