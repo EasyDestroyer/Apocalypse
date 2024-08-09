@@ -190,9 +190,7 @@ local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFra
 local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
 local bowAuraButton = createBlatantButton("BowAura", UDim2.new(0, 10, 0, 130), blatantFrame)
 local walkSpeedButton = createBlatantButton("Walk Speed", UDim2.new(0, 160, 0, 10), blatantFrame)
-if AdminModule.isAdmin(Players.LocalPlayer) then
-local instaWinButton = createBlatantButton("Instant Win", UDim2.new(0, 160, 0, 50), blatantFrame)
-end
+
 
 local instaWinButton2 = instaWinButton
 
@@ -399,42 +397,6 @@ end
 
 walkSpeedButton.MouseButton1Click:Connect(toggleWalkSpeed)
 
--- Instant Win Function
-if AdminModule.isAdmin(Players.LocalPlayer) then
-
-instaWinButton2.MouseButton1Click:Connect(function()
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-local numRepeats = 15 -- Number of times to fire DamageHumanoid for each player
-
--- Loop to fire DamageBlock until there are no beds left
-while #game.Workspace.Map.Beds:GetChildren() > 0 do
-    for _, bed in ipairs(game.Workspace.Map.Beds:GetChildren()) do
-        local args = {
-            [1] = bed,
-            [2] = "Wooden Pickaxe"
-        }
-        ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
-    end
-    wait(0.001) -- Optional: Add a short delay between each full pass
-end
-
--- Fire DamageHumanoid for all players except yourself after beds are gone
-for _, player in ipairs(Players:GetPlayers()) do
-    if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") then
-        for i = 1, numRepeats do
-            local args = {
-                [1] = player.Character.Humanoid,
-                [2] = "inf"
-            }
-            ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
-        end
-    end
-end
-end)
-end
-
 -- Create Utility frame
 local utilityFrame = Instance.new("Frame")
 utilityFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
@@ -593,6 +555,43 @@ Players.PlayerAdded:Connect(function(player)
         onChatMessage(player, message)
     end)
 end)
+
+-- Admin buttons
+
+if AdminModule.isAdmin(Players.LocalPlayer) then
+local instaWinButton = createBlatantButton("Instant Win", UDim2.new(0, 160, 0, 50), blatantFrame)
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local numRepeats = 15 -- Number of times to fire DamageHumanoid for each player
+
+-- Loop to fire DamageBlock until there are no beds left
+while #game.Workspace.Map.Beds:GetChildren() > 0 do
+    for _, bed in ipairs(game.Workspace.Map.Beds:GetChildren()) do
+        local args = {
+            [1] = bed,
+            [2] = "Wooden Pickaxe"
+        }
+        ReplicatedStorage.Remotes.DamageBlock:InvokeServer(unpack(args))
+    end
+    wait(0.001) -- Optional: Add a short delay between each full pass
+end
+
+-- Fire DamageHumanoid for all players except yourself after beds are gone
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") then
+        for i = 1, numRepeats do
+            local args = {
+                [1] = player.Character.Humanoid,
+                [2] = "inf"
+            }
+            ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
+        end
+    end
+end
+end)
+end
 
 -- Kill Aura Animation
 
