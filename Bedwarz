@@ -202,9 +202,10 @@ local function getSwordName()
     for _, sword in pairs(swords) do
         if Players.LocalPlayer.Backpack:FindFirstChild(sword) then
             return sword
+        end
     end
-return 'Wooden Sword'
-  end
+    
+    return 'Wooden Sword' -- Return 'Wooden Sword' if no swords are found
 end
 
 -- Find closest player excluding team members
@@ -241,6 +242,14 @@ end
 local killAuraEnabled = false
 local killAuraConnection
 local swordName = getSwordName()
+
+RunService.Heartbeat:Connect(function()
+    local newSwordName = getSwordName()
+    if newSwordName ~= swordName then
+        swordName = newSwordName
+        -- Handle sword name change if needed
+    end
+end)
 
 local function toggleKillAura()
     killAuraEnabled = not killAuraEnabled
