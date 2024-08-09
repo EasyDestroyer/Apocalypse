@@ -207,6 +207,7 @@ local function getSwordName()
   else
     return "Wooden Sword"
   end
+  end
 end
 end
 
