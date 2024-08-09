@@ -187,7 +187,7 @@ end
 local killAuraButton = createBlatantButton("Kill Aura", UDim2.new(0, 10, 0, 10), blatantFrame)
 local flyButton = createBlatantButton("Fly", UDim2.new(0, 10, 0, 50), blatantFrame)
 local nukerButton = createBlatantButton("Nuker", UDim2.new(0, 10, 0, 90), blatantFrame)
-local bowAuraButton = createBlatantButton("BowAura", UDim2.new(0, 10, 0, 130), blatantFrame)
+local bowAuraButton = createBlatantButton("BowMagic", UDim2.new(0, 10, 0, 130), blatantFrame)
 local walkSpeedButton = createBlatantButton("Walk Speed", UDim2.new(0, 160, 0, 10), blatantFrame)
 local instaWinButton = createBlatantButton("Instant Win", UDim2.new(0, 160, 0, 50), blatantFrame)
 
@@ -368,18 +368,6 @@ local function toggleBowAura()
     bowAuraEnabled = not bowAuraEnabled
     bowAuraButton.BackgroundColor3 = bowAuraEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
     bowAuraButton.BackgroundTransparency = bowAuraEnabled and 0 or 1
-
-    if bowAuraEnabled then
-        killAllPlayers()
-       end
-                wait(1) -- Delay to prevent spam
-            end
-        end)
-    else
-        if bowAuraConnection then
-            bowAuraConnection:Disconnect()
-        end
-    end
 end
 
 -- Bind the BowAura toggle function to the button
