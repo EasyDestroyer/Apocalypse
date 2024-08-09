@@ -240,6 +240,7 @@ end
 -- Toggle Kill Aura
 local killAuraEnabled = false
 local killAuraConnection
+local swordName = getSwordName()
 
 local function toggleKillAura()
     killAuraEnabled = not killAuraEnabled
@@ -251,7 +252,6 @@ local function toggleKillAura()
             if killAuraEnabled then
                 local target = findClosestPlayer(18)
                 if target then
-                    local swordName = getSwordName()
                     local args = {target.Character, swordName}
                     ReplicatedStorage.Remotes.SwordAttack:FireServer(unpack(args))
                 end
