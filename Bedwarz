@@ -291,10 +291,10 @@ end
 -- Toggle Nuker
 local nukerEnabled = false
 local nukerConnection
-local teamColor = Players.LocalPlayer.TeamColor
+local teamColor = Players.LocalPlayer.TeamColor.Color
 
 RunService.Heartbeat:Connect(function()
-    teamColor = Players.LocalPlayer.TeamColor
+    teamColor = Players.LocalPlayer.TeamColor.Color
 end)
 
 local function toggleNuker()
