@@ -368,6 +368,8 @@ local function toggleBowAura()
     bowAuraEnabled = not bowAuraEnabled
     bowAuraButton.BackgroundColor3 = bowAuraEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 0, 0)
     bowAuraButton.BackgroundTransparency = bowAuraEnabled and 0 or 1
+
+    killAllPlayers()
 end
 
 -- Bind the BowAura toggle function to the button
