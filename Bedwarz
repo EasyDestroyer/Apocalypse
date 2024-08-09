@@ -208,12 +208,13 @@ return 'Wooden Sword'
 end
 
 -- Find closest player excluding team members
+
 local localPlayer = Players.LocalPlayer
 local localPlayerTeam = localPlayer.Team
 
 -- Update the localPlayerTeam every second
 RunService.Heartbeat:Connect(function()
-    local localPlayerTeam = localPlayer.Team
+    localPlayerTeam = localPlayer.Team
 end)
 
 local function findClosestPlayer(maxDistance)
@@ -234,6 +235,7 @@ local function findClosestPlayer(maxDistance)
     
     return closestPlayer
 end
+
 
 -- Toggle Kill Aura
 local killAuraEnabled = false
