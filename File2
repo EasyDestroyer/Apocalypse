@@ -1,4 +1,4 @@
--- Kill
+-- [[ Kill
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -14,47 +14,21 @@ local function executeHumanoidDamage(humanoid)
     ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
 end
 
-local function startLoopkill(player)
-    spawn(function()
-        while table.find(activeKillLoops, player.Name) and player.Character and player.Character:FindFirstChild("Humanoid") do
-            executeHumanoidDamage(player.Character.Humanoid)
-            wait(1)  -- Adjust the wait time as needed
-        end
-        table.remove(activeKillLoops, table.find(activeKillLoops, player.Name))
-    end)
-end
-
 local function setupChatListener(plr)
     plr.Chatted:Connect(function(msg)
         local FirstWord, User = msg:match("^(;kill)%s*(.+)$")
-        local _, TargetUser = msg:match("^(;loopkill)%s*(.+)$")
-        local _, UnloopUser = msg:match("^(;unloopkill)%s*(.+)$")
-
-        if FirstWord and User and AdminModule.isAdmin(plr) then
+    
+    if FirstWord and User and AdminModule.isAdmin(plr) then
             local targetPlayer = Players:FindFirstChild(User)
             if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
                 executeHumanoidDamage(targetPlayer.Character.Humanoid)
             end
-        elseif TargetUser and AdminModule.isAdmin(plr) then
-            local targetPlayer = Players:FindFirstChild(TargetUser)
-            if targetPlayer and not table.find(activeKillLoops, targetPlayer.Name) then
-                table.insert(activeKillLoops, targetPlayer.Name)
-                startLoopkill(targetPlayer)
-            end
-        elseif UnloopUser and AdminModule.isAdmin(plr) then
-            local targetPlayer = Players:FindFirstChild(UnloopUser)
-            if targetPlayer then
-                local index = table.find(activeKillLoops, targetPlayer.Name)
-                if index then
-                    table.remove(activeKillLoops, index)
-                end
             end
         end
     end)
 end
 
 for _, player in ipairs(Players:GetPlayers()) do
-    table.insert(activeKillLoops, player.Name)
     setupChatListener(player)
 end
 
@@ -112,4 +86,31 @@ for _, plr in ipairs(Players:GetPlayers()) do
 end
 
 -- Setup chat listener for new players that join
-Players.PlayerAdded:Connect(setupChatListener3)
+Players.PlayerAdded:Connect(setupChatListener3) ]] --
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local AdminModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyDestroyer/EasyDestroyerCodes/main/File2"))()  -- Adjust the path as needed
+
+local activeKillLoops = {}
+
+local function executeHumanoidDamage(humanoid)
+    local args = {
+        [1] = humanoid,
+        [2] = "inf"
+    }
+    ReplicatedStorage.Remotes.DamageHumanoid:FireServer(unpack(args))
+end
+
+local function setupChatListener(plr)
+    plr.Chatted:Connect(function(msg)
+        local FirstWord, User = msg:match("^(;kill)%s*(.+)$")
+    
+    if FirstWord and User and AdminModule.isAdmin(plr) then
+            local targetPlayer = Players:FindFirstChild(User)
+            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
+                executeHumanoidDamage(targetPlayer.Character.Humanoid)
+            end
+    end
+    end)
+end
