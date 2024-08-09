@@ -18,4 +18,8 @@ function AdminModule.RemoveAdmin(username)
     end
 end
 
+function AdminModule.AddAdmin(username)
+    AdminList[username] = true
+end
+
 return AdminModule
